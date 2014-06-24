@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>zomGreg</title>
+    <meta name="description" content="">
+    <meta name="author" content="Greg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="./theme/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="./theme/bootstrap.min.css" rel="stylesheet">
+    <link href="./theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href="./theme/local.css" rel="stylesheet">
+    <link href="./theme/pygments.css" rel="stylesheet">
+
+</head>
+
+    <script type="text/javascript">
+        var disqus_shortname = 'gitzomgreg';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] ||
+             document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+<body>
+
+<div class="navbar">
+    <div class="navbar-inner">
+    <div class="container">
+
+         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+         </a>
+
+        <a class="brand" href=".">zomGreg</a>
+
+        <div class="nav-collapse">
+        <ul class="nav">
+            
+            <li><a href="./pages/about.html">About</a></li>
+            <li><a href="./pages/test.html">Test</a></li>
+        </ul>
+        </div>
+        
+    </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content">
+    <div class="row">
+
+        <div class="span9">
+    <div class='article'>
+        <div class="content-title">
+            <h1>Cloudy Apps: Part 1</h1>
+Tue 19 March 2013
+
+by <a class="url fn" href="./author/greg-moselle.html">Greg Moselle</a>
+ 
+
+
+        </div>
+	
+        <div><p>Moving applications into the cloud is popular: elastic beanstalk, heroku, and
+others all make it very easy to move applications into the cloud. The drawback
+to these products is that they serve a very narrow market, or more
+specifically, a very narrow application segment.</p>
+<p>What if your application doesn't fit the oft-referenced Linux, Apache, MySQL,
+P{ython,HP,erl} (LAMP) architecture? What if your application is deployed using
+JBOSS, Tomcat, Jetty, or some other framework altogether?</p>
+<p>A colleague of mine is quick to point out that the opportunity to migrate a
+'traditional' application to the cloud space can be somewhat limited. The
+limitation most likely comes from the cloud not being a one-cloud-fits-all
+application deployment space.</p>
+<p>Fortunately, there are approaches to deploying in the cloud that meet what I
+consider to be the requirements for operating an application in the cloud:</p>
+<ol class="arabic simple">
+<li>Set reasonable expectations.</li>
+<li>Know your application.</li>
+<li>Hypervisor agnostic, cloud independent.</li>
+<li>Scalable</li>
+</ol>
+<div class="section" id="set-reasonable-expectations">
+<h2>Set Reasonable Expectations</h2>
+<p>If you think you can &quot;just use Chef&quot; to deploy your application, you're wrong.
+Here's why: Products like Chef, Puppet, Enstratius, and others are only as
+smart as you make them. If part of meeting your deadline of T + 1 month for
+production release is that your team learn Chef, then you're in for an
+unpleasant surprise.</p>
+<p>Saying &quot;we'll just use Chef&quot; to solve all of our cloud application problems is
+the equivalent of saying &quot;we'll just use a calculator&quot; to pass the Calculus
+exam. Chef, Puppet, and Enstratius are extraordinarily powerful cloud
+orchestration/automation frameworks, but they're not without a learning curve.</p>
+</div>
+<div class="section" id="take-away">
+<h2>Take Away</h2>
+<p>You'll end up paying your technical debt one way or the other, planning for it
+will help take some of the sting out of that process.</p>
+</div>
+<div class="section" id="know-thy-application">
+<h2>Know Thy Application</h2>
+<p>This requirement cannot be overstated. Although this requirement seems obvious,
+it's unfortunately the first place most would-be cloud application developers
+fail.</p>
+<p>Pull out (or create) an application blueprint or architecture diagram and
+examine it for components or routines that require manual (human) intervention
+and mark those items as those in need of special attention.</p>
+<p>Here's an exercise I use to determine the cloudiness potential of an
+application: Using the application architecture diagram, pick a node or
+component and walk through the exercise of what needs to happen to the
+architecture as a whole when a failure of that node occurs.</p>
+<p>If one of the things that happens during that failure event is a PagerDuty
+alert is sent to the on-call sysadmin so he/she can change all the DNS entries
+that need to be updated, that's a good indication the application is not yet
+ready to be deployed to the cloud.</p>
+<div class="section" id="configuration-files">
+<h3>Configuration Files</h3>
+<p>I was once on site to work though some early cloud initiatives, one of which
+was the migration of an application running in the data center to a cloud
+environment. One of my first questions was where are all the configuration
+files that are used to configure all of the applications and databases
+comprising the application.</p>
+<p>The answer was disheartening from two perspectives. First, the application
+configuration files were scattered not just between a couple of developers and
+sysadmins, but in separate departments that required a monthly meeting to
+schedule a change. This did not bode well for the scaling objective.</p>
+<p>Second, I was informed that it was an unreasonable request that the application
+owner know where every single configuration for the application was held.
+Smiling? I wasn't. :)</p>
+</div>
+</div>
+<div class="section" id="firewalls">
+<h2>Firewalls</h2>
+<p>One of the trickiest parts of automating a cloud application can be the
+creation and updating of firewall rules. This goes for host-level firewalls
+like iptables but for cloud-based firewalls/security groups that are present in
+many clouds. If part of the application modification process is to schedule a
+firewall modification weeks in advance, your application is not cloud ready.</p>
+<p>Network security professionals often cringe at the thought of firewalls being
+manually updated, but that time is here. Audit the plan, audit the result, but
+most importantly audit the <em>process</em>.</p>
+</div>
+<div class="section" id="id1">
+<h2>Take Away</h2>
+<p>Knowing where all of your configuration files live and how they're created and
+updated is critical whether you're using Chef, Puppet, Enstratius, or any other
+cloud framework for application deployment.</p>
+<div class="section" id="hypervisor-agnostic-cloud-independent">
+<h3>Hypervisor Agnostic, Cloud Independent</h3>
+<p>A cloudy application is decoupled from the underlying infrastructure. The
+application should not rely on Xencenter, ESX/VMWare, KVM, or any other
+hypervisor technology.</p>
+<p>The particular hypervisor in use by a cloud vendor should be of no concern to
+the cloud application architect.</p>
+<p>If your application depends on cloud (or worse) vendor specific technologies
+down at the cloud layer, this should serve as an indication that at best your
+application is not able to operate in a multi-cloud environment. This may be
+okay in the short term, but in the long term, vendor lock-in at this layer will
+become very problematic as the cloud space matures.</p>
+<p>It's already a multi-cloud world, and marrying an application to a particular
+set of vendor tools is an inflexible approach to cloud application deployment.
+The application should leverage, not rely entirely on, specific cloud products.</p>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Take Away</h2>
+<p>Even if your current initiatives don't include a multi-cloud environment,
+future-proof your processes by accepting that at some point in the future, your
+application will have to be multi-cloud capable.</p>
+</div>
+<div class="section" id="summary-part-1">
+<h2>Summary (Part 1)</h2>
+<p>Have a full knowledge of your cloud application, and plan your application
+deployment for a cloud- and hypervisor-independent solution.</p>
+</div>
+</div>
+	
+        <hr>
+
+        <h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gitzomgreg'; 
+    var disqus_title = 'Cloudy Apps: Part 1';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+        </div>
+        
+        <div class="span3">
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Site
+                </li>
+            
+                <li><a href="./">Archives</a>
+                <li><a href="./tags.html">Tags</a>
+                <li><a href="http://zomgreg.com/" rel="alternate">Atom feed</a></li>
+            </ul>
+            </div>
+
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Categories
+                </li>
+                
+                <li><a href="./category/cloud.html">Cloud</a></li>
+                <li><a href="./category/linux.html">Linux</a></li>
+                <li><a href="./category/travel.html">Travel</a></li>
+                   
+            </ul>
+            </div>
+
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Links
+                </li>
+            
+                <li><a href="http://blog.lusis.org/">Blog dot Lusis</a></li>
+                <li><a href="https://github.com/zomgreg">zomgreg :: github</a></li>
+                <li><a href="http://compete.io/">Compete IO</a></li>
+            </ul>
+            </div>
+
+
+            <div class="social">
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Social
+                </li>
+           
+                <li><a href="https://twitter.com/zomgreg">Twitter</a></li>
+                <li><a href="https://www.linkedin.com/profile/view?id=128230853">LinkedIn</a></li>
+            </ul>
+            </div>
+            </div>
+
+        </div>  
+    </div>     </div> 
+<footer>
+<br />
+<p><a href=".">zomGreg</a> &copy; Greg 2012</p>
+</footer>
+
+</div> <!-- /container -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+<script>var _gaq=[['_setAccount','52134707'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'))</script>
+ 
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>zomGreg</title>
+    <meta name="description" content="">
+    <meta name="author" content="Greg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="./theme/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="./theme/bootstrap.min.css" rel="stylesheet">
+    <link href="./theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href="./theme/local.css" rel="stylesheet">
+    <link href="./theme/pygments.css" rel="stylesheet">
+
+</head>
+
+    <script type="text/javascript">
+        var disqus_shortname = 'gitzomgreg';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] ||
+             document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+<body>
+
+<div class="navbar">
+    <div class="navbar-inner">
+    <div class="container">
+
+         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+         </a>
+
+        <a class="brand" href=".">zomGreg</a>
+
+        <div class="nav-collapse">
+        <ul class="nav">
+            
+            <li><a href="./pages/about.html">About</a></li>
+            <li><a href="./pages/test.html">Test</a></li>
+        </ul>
+        </div>
+        
+    </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content">
+    <div class="row">
+
+        <div class="span9">
+    <div class='article'>
+        <div class="content-title">
+            <h1>Cloudy Apps: Part 2</h1>
+Tue 19 March 2013
+
+by <a class="url fn" href="./author/greg-moselle.html">Greg Moselle</a>
+ 
+
+
+        </div>
+	
+        <div><p>In <a class="reference external" href="./cloudy-apps-part-1.html">part one</a> we looked at cloud application deployment from a
+know-thy-app and cloud-independent perspective. In this part, we'll look at scaling and
+notifications.</p>
+<div class="section" id="scaling">
+<h2>Scaling</h2>
+<p>I saved scaling for last on purpose because although scaling is the sexy thing
+to do in the cloud, being able to scale properly depends on satisfying the
+above requirements.</p>
+<p>The process for determining the scalability of an application is similar to the
+one used to determine how well the application is known. Use the application
+diagram again and step through the addition of a node to the application
+tier/group, keeping in mind the following questions:</p>
+<ol class="arabic simple">
+<li>What should trigger that scaling event?</li>
+<li>When scaling occurs at the application layer, what components in the application
+architecture should be notified of that event?</li>
+<li>What configuration file changes on dependent services does the addition/subtraction of
+a node at the application layer necessitate?</li>
+<li>What firewall changes need to be made to accommodate the addition of a new node or the
+subtraction of a terminated node?</li>
+<li>What notifications should be sent when scaling occurs?</li>
+</ol>
+<p>Repeat this process for every logical grouping of scalable resources.</p>
+</div>
+<div class="section" id="scaling-triggers">
+<h2>Scaling Triggers</h2>
+<p>From an infrastructure perspective, scaling is trivial: start new nodes when
+they're needed, terminate nodes when they're not.</p>
+<p>Scaling should be triggered by a metric that means something to your
+application. Scaling based on CPU/Memory metrics is likely not the best means
+to determine the scaling needs of your application for two reasons.</p>
+<p>First, high CPU/Memory usage can be caused by operating system processes other
+than those that are driving your application. Second, although your node
+<em>thinks</em> it has a CPU, it actually has the hypervisor representation of a CPU,
+and the metrics presented to the OS are necessarily second-hand.</p>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies</h2>
+<p>The next three items are really about handling dependencies. Generically,
+dependencies are the questions that have to be satisfied when changes occur in
+one layer of an application architecture.</p>
+<p>An example of a dependency is when an application node joins or leaves the
+application group, the database group should be notified of this change to, for
+example, execute a grant/revoke routine to grant/revoke access to a node that
+joins/leaves the application group.</p>
+<p>Dependency satisfaction should be facilitated by the cloud
+orchestration/automation framework being used to deploy and manage the
+application stack.</p>
+<p>The changes that are triggered during dependency handling should be:</p>
+<ol class="arabic">
+<li><p class="first">Predictable</p>
+<p>The scaling triggers will govern when the dependencies need to be handled.</p>
+</li>
+<li><p class="first">Idempotent</p>
+<p>The process that satisfies the dependencies should be able to be run many times,
+producing the same output.</p>
+</li>
+</ol>
+<div class="section" id="notifications">
+<h3>Notifications</h3>
+<p>Notifications are really about handling the governance aspect of application
+automation.  When changes/scaling occurs in a scaling group or firewall, are
+those events published to an API endpoint, message queue, email, or SMS?</p>
+<p>Getting insight into what has happened as automated events affect your
+application is critical for being able to create after-action reports,
+lessons-learned, and process improvement.</p>
+</div>
+</div>
+<div class="section" id="summary">
+<h2>Summary</h2>
+<p>Deploying applications into the cloud doesn't have to suck. With preparation,
+knowledge of the application, implementation of an automation/orchestration
+framework, and a notification system, you can surely control all of the aspects
+necessary for moving applications into the cloud.</p>
+<p>Finally, not all applications are destined for the cloud, and that's okay.
+Although I work in the cloud every day, I'll freely admit that the cloud
+operating environment has limitations that prohibit some applications from
+living in a cloud. Use the guidelines here to help identify candidate
+applications for migration to the cloud.</p>
+</div>
+</div>
+	
+        <hr>
+
+        <h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gitzomgreg'; 
+    var disqus_title = 'Cloudy Apps: Part 2';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+        </div>
+        
+        <div class="span3">
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Site
+                </li>
+            
+                <li><a href="./">Archives</a>
+                <li><a href="./tags.html">Tags</a>
+                <li><a href="http://zomgreg.com/" rel="alternate">Atom feed</a></li>
+            </ul>
+            </div>
+
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Categories
+                </li>
+                
+                <li><a href="./category/cloud.html">Cloud</a></li>
+                <li><a href="./category/linux.html">Linux</a></li>
+                <li><a href="./category/travel.html">Travel</a></li>
+                   
+            </ul>
+            </div>
+
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Links
+                </li>
+            
+                <li><a href="http://blog.lusis.org/">Blog dot Lusis</a></li>
+                <li><a href="https://github.com/zomgreg">zomgreg :: github</a></li>
+                <li><a href="http://compete.io/">Compete IO</a></li>
+            </ul>
+            </div>
+
+
+            <div class="social">
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Social
+                </li>
+           
+                <li><a href="https://twitter.com/zomgreg">Twitter</a></li>
+                <li><a href="https://www.linkedin.com/profile/view?id=128230853">LinkedIn</a></li>
+            </ul>
+            </div>
+            </div>
+
+        </div>  
+    </div>     </div> 
+<footer>
+<br />
+<p><a href=".">zomGreg</a> &copy; Greg 2012</p>
+</footer>
+
+</div> <!-- /container -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+<script>var _gaq=[['_setAccount','52134707'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'))</script>
+ 
+</body>
+</html>

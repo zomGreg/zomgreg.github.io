@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>zomGreg</title>
+    <meta name="description" content="">
+    <meta name="author" content="Greg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="../theme/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="../theme/bootstrap.min.css" rel="stylesheet">
+    <link href="../theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href="../theme/local.css" rel="stylesheet">
+    <link href="../theme/pygments.css" rel="stylesheet">
+
+</head>
+
+    <script type="text/javascript">
+        var disqus_shortname = 'gitzomgreg';
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] ||
+             document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+<body>
+
+<div class="navbar">
+    <div class="navbar-inner">
+    <div class="container">
+
+         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+         </a>
+
+        <a class="brand" href="..">zomGreg</a>
+
+        <div class="nav-collapse">
+        <ul class="nav">
+            
+            <li><a href="../pages/about.html">About</a></li>
+            <li><a href="../pages/test.html">Test</a></li>
+        </ul>
+        </div>
+        
+    </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="content">
+    <div class="row">
+
+        <div class="span9">
+        
+
+        
+
+
+    <div class='article'>
+        <div class="content-title">
+            <a href="../ssh-tunnel.html"><h1>SSH Tunnel</h1></a>
+Mon 30 July 2012
+
+by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
+ 
+
+
+ 
+        </div>
+        
+        <div><p>SSH is quite a bit more powerful than most people, myself included, give it
+credit. I'm often in a position where I need to be able to view http or https
+web pages on a remote system that is not accessible on 80 or 443. The solution
+is to tunnel https traffic over SSH. Here's how it works.</p>
+<img alt="SSH Tunnel Tunnel" src="./images/sshTunnel.png" />
+<div class="section" id="the-problem">
+<h2>The Problem</h2>
+<p>I have a web service running on the remote host on port 443, but no access to
+that system because it only has a private IP address, for one thing, and it has
+a firewall blocking port 443 traffic between my home host and it.</p>
+<p>The remote host does allow SSH traffic on port 22 from the intermediary host.</p>
+<p>To tunnel https traffic to my localhost from the remote host, I do this:</p>
+<div class="section" id="on-remote-host">
+<h3>On Remote Host</h3>
+<div class="highlight"><pre>ssh -R *:8888:localhost:443 root@192.168.122.1 -N
+</pre></div>
+<p>This command will set up a listener on the <strong>Intermediary Host</strong> on port 8888. As shown:</p>
+<div class="highlight"><pre><span class="o">[</span>root@enf ~<span class="o">]</span><span class="c"># netstat -tnlup | grep ssh</span>
+tcp        0      0 0.0.0.0:22                  0.0.0.0:*                   LISTEN  4461/sshd
+tcp        0      0 127.0.0.1:8888              0.0.0.0:*                   LISTEN 31448/sshd: root
+</pre></div>
+<p>Any traffic hitting the Intermediary host machine on port 8888 will
+automatically be forwarded to the Dell Cloud Manager console machine on port
+443, which is where the web service is listening.</p>
+<p>However, since it's only listening on 127.0.0.1, we cannot yet access the web service
+from Home.</p>
+</div>
+<div class="section" id="on-home-host">
+<h3>On Home Host</h3>
+<div class="highlight"><pre>sudo ssh -L 443:localhost:8888 root@68.999.999.999 -N
+</pre></div>
+<p>This command will set up a listener on localhost, port 443, as shown.</p>
+<div class="highlight"><pre>gmoselle@dragonfly:~<span class="nv">$ </span>sudo netstat -an | grep 443
+tcp4       0      0  127.0.0.1.443          *.*                    LISTEN
+</pre></div>
+<p>You must have root privileges to set up a listener on a &quot;standard&quot; port.</p>
+</div>
+<div class="section" id="hosts-file">
+<h3>Hosts File</h3>
+<p>Finally, to complete the tunnel, I make a hosts file entry so I can access the web
+service.</p>
+<p>127.0.0.1 cloud.myremoteconsole.com</p>
+<p>Open a browser, and navigate to <a class="reference external" href="https://localhost">https://localhost</a> and the remote remote web
+service should appear. Way cool.</p>
+</div>
+</div>
+</div>
+        <hr />
+    </div>
+		
+<div class="pagination">
+<ul>
+    <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+
+    <li class="active"><a href="../tag/linux.html">1</a></li>
+
+    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+
+</ul>
+</div>
+ 
+  
+        </div>
+        
+        <div class="span3">
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Site
+                </li>
+            
+                <li><a href="../">Archives</a>
+                <li><a href="../tags.html">Tags</a>
+                <li><a href="http://zomgreg.com/" rel="alternate">Atom feed</a></li>
+            </ul>
+            </div>
+
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Categories
+                </li>
+                
+                <li><a href="../category/cloud.html">Cloud</a></li>
+                <li><a href="../category/linux.html">Linux</a></li>
+                <li><a href="../category/travel.html">Travel</a></li>
+                   
+            </ul>
+            </div>
+
+
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Links
+                </li>
+            
+                <li><a href="http://blog.lusis.org/">Blog dot Lusis</a></li>
+                <li><a href="https://github.com/zomgreg">zomgreg :: github</a></li>
+                <li><a href="http://compete.io/">Compete IO</a></li>
+            </ul>
+            </div>
+
+
+            <div class="social">
+            <div class="well" style="padding: 8px 0; background-color: #FBFBFB;">
+            <ul class="nav nav-list">
+                <li class="nav-header"> 
+                Social
+                </li>
+           
+                <li><a href="https://twitter.com/zomgreg">Twitter</a></li>
+                <li><a href="https://www.linkedin.com/profile/view?id=128230853">LinkedIn</a></li>
+            </ul>
+            </div>
+            </div>
+
+        </div>  
+    </div>     </div> 
+<footer>
+<br />
+<p><a href="..">zomGreg</a> &copy; Greg 2012</p>
+</footer>
+
+</div> <!-- /container -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+<script>var _gaq=[['_setAccount','52134707'],['_trackPageview']];(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src='//www.google-analytics.com/ga.js';s.parentNode.insertBefore(g,s)}(document,'script'))</script>
+ 
+</body>
+</html>
