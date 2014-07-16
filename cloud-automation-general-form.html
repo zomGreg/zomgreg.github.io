@@ -126,8 +126,8 @@ required to scale the application at each point where scaling is required.</p>
 <h2>Applications - A General Form</h2>
 <p>Many application architectures can be reasonably approximated by three tiers: a
 web, application, and database tier.</p>
-<div class="figure align-center" style="width: 960px; height: auto; max-width: 100%;">
-<img alt="General Application" src="./images/application.png" style="width: 960px; height: auto; max-width: 100%;"/>
+<div class="figure align-center" style="width: 466px; height: auto; max-width: 100%;">
+<img alt="General Application" src="./images/application.png" style="width: 466px; height: auto; max-width: 100%;"/>
 </div>
 <p>As with any approximation, there is some loss of granularity, for example I did
 not include a load balancer in this diagram, as that function can and often is
@@ -139,8 +139,8 @@ Tomcat, many LAMP applications, and others require these elements.</p>
 <h2>Change: A Scaling Event</h2>
 <p>Following the steps listed above, let us follow the case of a scaling event
 that results in the addition of another application node.</p>
-<div class="figure align-center" style="width: 1148px; height: auto; max-width: 100%;">
-<img alt="General Application - Scaling Event" src="./images/application2.png" style="width: 1148px; height: auto; max-width: 100%;"/>
+<div class="figure align-center" style="width: 560px; height: auto; max-width: 100%;">
+<img alt="General Application - Scaling Event" src="./images/application2.png" style="width: 560px; height: auto; max-width: 100%;"/>
 </div>
 <p>If the process to determine the need to scale was automated, the
 framework/utility in which the application was deployed needs to be able to
@@ -163,20 +163,20 @@ nodes.</p>
 <p>To make things even more rigorous, the configuration steps taken on the web and
 database tiers should be taken <em>after</em> the configuration of the application
 node is complete, but more on that later.</p>
-<div class="figure align-center" style="width: 1620px; height: auto; max-width: 100%;">
-<img alt="General Application - Configure App Node" src="./images/application3.png" style="width: 1620px; height: auto; max-width: 100%;"/>
+<div class="figure align-center" style="width: 640px; height: auto; max-width: 100%;">
+<img alt="General Application - Configure App Node" src="./images/application3.png" style="width: 640px; height: auto; max-width: 100%;"/>
 </div>
 <p>The steps to notify the web and database tiers should happen almost
 simultaneously. The proper ordering of automation events includes the complete
 configuration <em>but not the starting</em> of the application node's application.</p>
-<div class="figure align-center" style="width: 1428px; height: auto; max-width: 100%;">
-<img alt="General Application - Notify Dependents" src="./images/application4.png" style="width: 1428px; height: auto; max-width: 100%;"/>
+<div class="figure align-center" style="width: 552px; height: auto; max-width: 100%;">
+<img alt="General Application - Notify Dependents" src="./images/application4.png" style="width: 552px; height: auto; max-width: 100%;"/>
 </div>
 <p>Once the dependent services are aware of and have made accommodations for the
 newly joined application node, the cloud automation framework should trigger
 the starting of the application on the new application node.</p>
-<div class="figure align-center" style="width: 1472px; height: auto; max-width: 100%;">
-<img alt="General Application - Start the App" src="./images/application5.png" style="width: 1472px; height: auto; max-width: 100%;"/>
+<div class="figure align-center" style="width: 640px; height: auto; max-width: 100%;">
+<img alt="General Application - Start the App" src="./images/application5.png" style="width: 640px; height: auto; max-width: 100%;"/>
 </div>
 </div>
 <div class="section" id="next-steps">
