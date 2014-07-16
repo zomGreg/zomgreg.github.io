@@ -73,8 +73,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href="../server-lifetime.html"><h1>Server Lifetime as SDLC Metric</h1></a>
-Tue 08 July 2014
+            <a href="../cloud-automation-general-form.html"><h1>Cloud Automation - General Form</h1></a>
+Wed 16 July 2014
 
 by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
  
@@ -83,109 +83,170 @@ by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
  
         </div>
         
-        <div><html><body><p>Earlier we looked at gaining insight into <a class="reference external" href="../driving-devops.html">the DevOps-ification</a> of an organization.</p>
-<p>Let's look at using server "lifespan" as a metric for gauging the cloudiness of
-a software development life cycle (SDLC) work flow.</p>
-<p>Learn to treat servers like code, strive to automate server deploys and you
-will soon find yourself telling your servers:</p>
-<p>I like you, that's why I'm going to kill you first.</p>
-<div class="section" id="ephemeral-embrace">
-<h2>Ephemeral Embrace</h2>
-<p>The ephemeral nature of cloud servers is a concept that seems like it should be
-straightforward to adopt, but in my experience embracing the ephemerality of a
-VM is something most organizations/teams are not yet ready to do. Why not? I
-have a couple of ideas:</p>
+        <div><html><body><p>Automate application deployment using the cloud! Sure, let's do that, right
+after we figure out if <a class="reference external" href="../cloudy-apps-part-1.html">the application fits a cloud deployment model</a> and see how well the application is known.</p>
+<p>The goal when planning for application automation in the cloud is to be able to
+push the "go button" and have the application stack be completely deployed
+without the involvement of a human being.</p>
+<p>Additionally, should a failure occur, the application stack should be able to
+be restored to full strength without human intervention.</p>
+<p>A tall order, no doubt. How to get there from here:</p>
+<div class="section" id="getting-started">
+<h2>Getting Started</h2>
+<p>The first step in planning for deployment of a cloud application is to map out
+the following cases:</p>
 <ol class="arabic">
-<li><p class="first">They have immature infrastructure management practices.</p>
-<p>Even organizations that have largely virtualized their infrastructure
-continue to enforce draconian change control and procurement policies. Some
-managers with whom I've interacted have indicated it takes 9 days from the time
-a user requests a virtual machine to the time the resource is delivered to the
-end user. 9. Days. We'd bleed personnel if it took them more than 9 minutes to
-get a VM.</p>
-<p>If it takes 9 days to obtain a needed resource, as a user I'd sure as hell
-hold onto that VM for as long as I could.</p>
-<p>The same manager responsible for the 9-day procurement time is also
-convinced that if users are able to provision their own virtual severs, they
-would provision ad infinitum. I wonder why...</p>
+<li><p class="first">What are the steps involved in achieving a running application?</p>
+<p>Starting from building blocks like software build artifacts and a base
+image, for example, how does the application reach a functional state?</p>
+<p>If part of the steps involves the database team and security teams, include
+them in this discussion.</p>
+<p>Map the steps out serially as though the goal was to create a tutorial for
+deploying the application. Don't try to automate yet, it will only impede
+later steps.</p>
+<p>Done with that part? Don't worry if the steps have to be revised, that's
+part of the process.</p>
 </li>
-<li><p class="first">They have immature SDLC work flows.</p>
-<p>On my team, the build-test-dev cycle is a continuous efficiency loop. To
-build artifacts from source, deploy, and test should take less than 15 minutes.
-That's including the provisioning of a cloud server upon which the code is
-deployed. Want to reproduce a problem? Pull the tag, deploy, and build.</p>
-<p>Many organizations/teams implement this cycle on static server farms, and miss
-out on leveraging the benefits of using configuration management and ephemeral
-cloud servers to implement a true end-to-end development cycle.</p>
+<li><p class="first">Draw the finished application architecture.</p>
+<p>This is usually the first step taken by application designers, and that's
+fine. Try not to group things together that are not alike. For example,
+separate into tiers the web, application, and database elements, as
+appropriate.</p>
+</li>
+<li><p class="first">Break it and map the steps to fix the problem.</p>
+<p>Now that the application architecture is created. Pick an essential element
+such as a application node and walk through the steps that need to happen in
+order to restore the application stack to full strength.</p>
+<p>I'll shortly argue that there are a general set of steps involved in this
+process, but this exercise is vital to the task of automating the overall
+application.</p>
+</li>
+<li><p class="first">Scale it and map the steps required to accommodate that change.</p>
+<p>Scaling is often another expectation for applications deployed to the cloud.
+A similar process to handling breakage can be used in determining the steps
+required to scale the application at each point where scaling is required.</p>
 </li>
 </ol>
 </div>
-<div class="section" id="measuring-ephemerality">
-<h2>Measuring Ephemerality</h2>
-<p>One prominent software company uses server lifespan as a measure of the
-efficiency of their SDLC processes.</p>
-<p>Their target server lifespan is 30 hours. That is, from the time a cloud server
-is instantiated to the time it is destroyed, no more than 30 hours should have
-elapsed.</p>
-<p>And when the servers are destroyed, that means destroyed, not snapshotted, not
-imaged, not archived. Really gone.</p>
-<p>For how many hours has your development environment been in existence?</p>
-<p>The maturity of a cloudy SDLC ensures a repeatable, collaborative, iterative,
-fail-friendly approach to software development.</p>
+<div class="section" id="applications-a-general-form">
+<h2>Applications - A General Form</h2>
+<p>Many application architectures can be reasonably approximated by three tiers: a
+web, application, and database tier.</p>
+<div class="figure align-center" style="width: 960px; height: auto; max-width: 100%;">
+<img alt="General Application" src="../images/application.png" style="width: 960px; height: auto; max-width: 100%;"/>
 </div>
-<div class="section" id="cattle-not-pets">
-<h2>Cattle not Pets</h2>
-<p>Over at <a class="reference external" href="https://blog.engineyard.com/2014/pets-vs-cattle">Engine Yard</a>
-there's a good post about cloud servers and how treating them as ephemeral
-entities can transform software development work flows.</p>
-<p>My colleague at <a class="reference external" href="http://blog.lusis.org/">blog dot lusis</a> advocates for the "get it working,
-then tear it down, then get it working again" approach until the process is
-fully repeatable.</p>
-<p>Server builds not working? Shoot the server in the head and do it again until
-it works.</p>
-<p>As an animal lover I'm not the biggest fan of these analogies, so I'll go with
-the Buddhism concept of Bhavachakra, the wheel of life. The process of birth
-and rebirth of existence.</p>
+<p>As with any approximation, there is some loss of granularity, for example I did
+not include a load balancer in this diagram, as that function can and often is
+performed at the web tier by software such as nginx or apache.</p>
+<p>A very large amount of applications can be approximated by this diagram.
+Tomcat, many LAMP applications, and others require these elements.</p>
 </div>
-<div class="section" id="ephemeral-transformation">
-<h2>Ephemeral Transformation</h2>
-<p>As cloudy software practices mature, and as the dev-test process matures,
-expect users to become more and more self-sufficient and efficient at software
-delivery.</p>
-<p>Users, operations and development alike, will begin to treat servers as
-temporary entities, deployed repeatably and reliably.</p>
-<div class="figure align-center" style="width: 1035px; height: auto; max-width: 100%;">
-<img alt="Server Lifespan" src="../images/server_lifespan.png" style="width: 1035px; height: auto; max-width: 100%;"/>
+<div class="section" id="change-a-scaling-event">
+<h2>Change: A Scaling Event</h2>
+<p>Following the steps listed above, let us follow the case of a scaling event
+that results in the addition of another application node.</p>
+<div class="figure align-center" style="width: 1148px; height: auto; max-width: 100%;">
+<img alt="General Application - Scaling Event" src="../images/application2.png" style="width: 1148px; height: auto; max-width: 100%;"/>
 </div>
-<p>Note the extraordinary increase in monthly server creation volume starting in
-2013-03. It corresponds directly to a precipitous decrease in average server
-lifetime.</p>
-<p>The last data point in 2013-11 represents 4705 server launches with an average
-lifespan of 19.4 hours.</p>
-<p>The inflection point starting at 2013-03 represents a mature infrastructure
-management process. Users can be added to the system programmatically and
-start provisioning virtual resources in less than one hour.</p>
-<p>Additionally, software teams began to fully leverage the flexibility of the
-cloud and created fast development work flows</p>
-<p>Another takeaway message is an insight into server sprawl. The total launch
-count for the months shown is 67882. The cloud capacity for running servers is
-significantly less than this number, and due to the mature infrastructure
-management processes, there is no problem of sprawl. Not shown in this chart is
-a nearly equal number of server terminations when viewed in a month-over-month
-basis.</p>
+<p>If the process to determine the need to scale was automated, the
+framework/utility in which the application was deployed needs to be able to
+handle such events.</p>
+<p>In any case, once the application node has joined the application tier, what
+are the steps that need to happen to handle this change?</p>
+<p>Generally, scaling should be used to "right size" the pool of resources.
+Scaling results in the addition of extra nodes to meet demand or the reduction
+in the number of nodes in response to decreased demand.</p>
+<p>In this case, an application node has joined the application tier. <em>Dependent</em>
+services running in the web and database tier are affected by this change. For
+example, nodes in the web tier might need to know about this change in order to
+start directing traffic to the newly christened application node.</p>
+<p>The database nodes in the database tier need to know to allow for
+incoming traffic from the new application node.</p>
+<p>The new application node itself also requires information if it is to be a
+fully functional member of the application stack. It needs to know how to reach
+and authenticate to the database nodes, and to allow for traffic from the web
+nodes.</p>
+<p>To make things even more rigorous, the configuration steps taken on the web and
+database tiers should be taken <em>after</em> the configuration of the application
+node is complete, but more on that later.</p>
+<div class="figure align-center" style="width: 1620px; height: auto; max-width: 100%;">
+<img alt="General Application - Configure App Node" src="../images/application3.png" style="width: 1620px; height: auto; max-width: 100%;"/>
 </div>
-<div class="section" id="summary">
-<h2>Summary</h2>
-<p>Targeting a low average server lifespan is critical for some software
-development processes, primarily the development and test phases.</p>
-<p>In other cases, a longer server lifespan can be an indicator of reliability.</p>
-<p>Using cloud infrastructure to facilitate the maturation software processes is a
-perfect use case for the cloud.</p>
+<p>The steps to notify the web and database tiers should happen almost
+simultaneously. The proper ordering of automation events includes the complete
+configuration <em>but not the starting</em> of the application node's application.</p>
+<div class="figure align-center" style="width: 1428px; height: auto; max-width: 100%;">
+<img alt="General Application - Notify Dependents" src="../images/application4.png" style="width: 1428px; height: auto; max-width: 100%;"/>
+</div>
+<p>Once the dependent services are aware of and have made accommodations for the
+newly joined application node, the cloud automation framework should trigger
+the starting of the application on the new application node.</p>
+<div class="figure align-center" style="width: 1472px; height: auto; max-width: 100%;">
+<img alt="General Application - Start the App" src="../images/application5.png" style="width: 1472px; height: auto; max-width: 100%;"/>
+</div>
+</div>
+<div class="section" id="next-steps">
+<h2>Next Steps</h2>
+<p>In this example we handled a generic scaling case involving the addition of a
+new node to an application tier.</p>
+<p>After presenting the process for automating an example application in this way,
+the question I most often receive is: That's nice for <em>your</em> application, will
+it work for mine?</p>
+<p>This question is akin to asking if addition will work on adding your numbers
+like it did on mine.</p>
+<p>The answer is, wait for it, it depends. The short answer is it depends on how
+well you know the application being automated.</p>
+<p>To find out whether or not your application can be automated in this way, start
+with a couple of assumptions:</p>
+<ol class="arabic simple">
+<li>The cloud automation framework shown in the diagram exists. Hint: it does.</li>
+<li>The framework passes information to nodes that need it, when they need it.</li>
+<li>The information is passed securely, and is configurable.</li>
+</ol>
+<p>Next, ask these questions:</p>
+<ol class="arabic simple">
+<li>How well do you know the application being automated? This means, among
+other things, knowing:<ul>
+<li>Where are the configuration files for the application?</li>
+<li>What are the steps involved in starting up the application?</li>
+<li>Are there any dependencies for the application such as databases and load balancers?</li>
+<li>If dependencies exist, how can they be notified of failures or scaling?</li>
+</ul>
+</li>
+<li>What steps need to happen in the event of failure?</li>
+<li>What steps need to happen in the event of scaling?</li>
+</ol>
+</div>
+<div class="section" id="wrapping-up">
+<h2>Wrapping Up</h2>
+<p>Automating infrastructure changes via scaling is relatively trivial. The
+interesting part comes when the applications housed upon said infrastructure.</p>
+<p>I hope this post has provided some insight into the consideration required for
+automating a cloud application.</p>
 </div>
 </body></html></div>
         <hr />
     </div>
 		
+
+ 
+        
+
+ 
+
+    <div class='article'>
+        <a href="../server-lifetime.html"><h2>Server Lifetime as SDLC Metric</h2></a>
+        <div class= "well small"> Tue 08 July 2014
+
+by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
+ 
+
+
+ </div>
+        <div class="summary"><p class="first last">Server Lifetime as SDLC Metric. Or I like you, that's why I'm going to kill you first.</p>
+ <a class="btn btn-info xsmall" href="../server-lifetime.html">read more</a></div>
+    </div>	
+				
 
  
         
@@ -243,32 +304,14 @@ by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
  <a class="btn btn-info xsmall" href="../cloudy-apps-part-2.html">read more</a></div>
     </div>	
 				
-
- 
-        
-
- 
-
-    <div class='article'>
-        <a href="../cloudy-apps-part-1.html"><h2>Cloudy Apps: Part 1</h2></a>
-        <div class= "well small"> Tue 19 March 2013
-
-by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
- 
-
-
- </div>
-        <div class="summary"><p class="first last">Moving applications to the cloud - Part 1</p>
- <a class="btn btn-info xsmall" href="../cloudy-apps-part-1.html">read more</a></div>
-    </div>	
-				
 <div class="pagination">
 <ul>
     <li class="prev disabled"><a href="#">&larr; Previous</a></li>
 
     <li class="active"><a href="../tag/cloud.html">1</a></li>
+    <li class=""><a href="../tag/cloud2.html">2</a></li>
 
-    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+    <li class="next"><a href="../tag/cloud2.html">Next &rarr;</a></li>
 
 </ul>
 </div>
@@ -312,6 +355,7 @@ by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
                 </li>
             
                 <li><a href="http://iambrianwilliams.com">I am Brian</a></li>
+                <li><a href="http://www.peakscale.com/">PeakScale</a></li>
                 <li><a href="http://blog.lusis.org/">Blog dot Lusis</a></li>
                 <li><a href="https://github.com/zomgreg">zomgreg :: github</a></li>
                 <li><a href="http://compete.io/">Compete IO</a></li>

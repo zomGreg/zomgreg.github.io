@@ -9,14 +9,14 @@
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
-    <script src="../theme/html5.js"></script>
+    <script src="./theme/html5.js"></script>
     <![endif]-->
 
     <!-- Le styles -->
-    <link href="../theme/bootstrap.min.css" rel="stylesheet">
-    <link href="../theme/bootstrap.min.responsive.css" rel="stylesheet">
-    <link href="../theme/local.css" rel="stylesheet">
-    <link href="../theme/pygments.css" rel="stylesheet">
+    <link href="./theme/bootstrap.min.css" rel="stylesheet">
+    <link href="./theme/bootstrap.min.responsive.css" rel="stylesheet">
+    <link href="./theme/local.css" rel="stylesheet">
+    <link href="./theme/pygments.css" rel="stylesheet">
 
 </head>
 
@@ -42,13 +42,13 @@
              <span class="icon-bar"></span>
          </a>
 
-        <a class="brand" href="..">zomGreg</a>
+        <a class="brand" href=".">zomGreg</a>
 
         <div class="nav-collapse">
         <ul class="nav">
             
-            <li><a href="../pages/about.html">About</a></li>
-            <li><a href="../pages/presentations.html">Presentations</a></li>
+            <li><a href="./pages/about.html">About</a></li>
+            <li><a href="./pages/presentations.html">Presentations</a></li>
         </ul>
         </div>
         
@@ -66,25 +66,19 @@
     <div class="row">
 
         <div class="span9">
-        
-
-        
-
-
     <div class='article'>
         <div class="content-title">
-            <a href="../cloud-automation-general-form.html"><h1>Cloud Automation - General Form</h1></a>
+            <h1>Cloud Automation - General Form</h1>
 Wed 16 July 2014
 
-by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
+by <a class="url fn" href="./author/greg-moselle.html">Greg Moselle</a>
  
 
 
- 
         </div>
-        
+	
         <div><html><body><p>Automate application deployment using the cloud! Sure, let's do that, right
-after we figure out if <a class="reference external" href="../cloudy-apps-part-1.html">the application fits a cloud deployment model</a> and see how well the application is known.</p>
+after we figure out if <a class="reference external" href="./cloudy-apps-part-1.html">the application fits a cloud deployment model</a> and see how well the application is known.</p>
 <p>The goal when planning for application automation in the cloud is to be able to
 push the "go button" and have the application stack be completely deployed
 without the involvement of a human being.</p>
@@ -133,7 +127,7 @@ required to scale the application at each point where scaling is required.</p>
 <p>Many application architectures can be reasonably approximated by three tiers: a
 web, application, and database tier.</p>
 <div class="figure align-center" style="width: 960px; height: auto; max-width: 100%;">
-<img alt="General Application" src="../images/application.png" style="width: 960px; height: auto; max-width: 100%;"/>
+<img alt="General Application" src="./images/application.png" style="width: 960px; height: auto; max-width: 100%;"/>
 </div>
 <p>As with any approximation, there is some loss of granularity, for example I did
 not include a load balancer in this diagram, as that function can and often is
@@ -146,7 +140,7 @@ Tomcat, many LAMP applications, and others require these elements.</p>
 <p>Following the steps listed above, let us follow the case of a scaling event
 that results in the addition of another application node.</p>
 <div class="figure align-center" style="width: 1148px; height: auto; max-width: 100%;">
-<img alt="General Application - Scaling Event" src="../images/application2.png" style="width: 1148px; height: auto; max-width: 100%;"/>
+<img alt="General Application - Scaling Event" src="./images/application2.png" style="width: 1148px; height: auto; max-width: 100%;"/>
 </div>
 <p>If the process to determine the need to scale was automated, the
 framework/utility in which the application was deployed needs to be able to
@@ -170,19 +164,19 @@ nodes.</p>
 database tiers should be taken <em>after</em> the configuration of the application
 node is complete, but more on that later.</p>
 <div class="figure align-center" style="width: 1620px; height: auto; max-width: 100%;">
-<img alt="General Application - Configure App Node" src="../images/application3.png" style="width: 1620px; height: auto; max-width: 100%;"/>
+<img alt="General Application - Configure App Node" src="./images/application3.png" style="width: 1620px; height: auto; max-width: 100%;"/>
 </div>
 <p>The steps to notify the web and database tiers should happen almost
 simultaneously. The proper ordering of automation events includes the complete
 configuration <em>but not the starting</em> of the application node's application.</p>
 <div class="figure align-center" style="width: 1428px; height: auto; max-width: 100%;">
-<img alt="General Application - Notify Dependents" src="../images/application4.png" style="width: 1428px; height: auto; max-width: 100%;"/>
+<img alt="General Application - Notify Dependents" src="./images/application4.png" style="width: 1428px; height: auto; max-width: 100%;"/>
 </div>
 <p>Once the dependent services are aware of and have made accommodations for the
 newly joined application node, the cloud automation framework should trigger
 the starting of the application on the new application node.</p>
 <div class="figure align-center" style="width: 1472px; height: auto; max-width: 100%;">
-<img alt="General Application - Start the App" src="../images/application5.png" style="width: 1472px; height: auto; max-width: 100%;"/>
+<img alt="General Application - Start the App" src="./images/application5.png" style="width: 1472px; height: auto; max-width: 100%;"/>
 </div>
 </div>
 <div class="section" id="next-steps">
@@ -225,98 +219,23 @@ interesting part comes when the applications housed upon said infrastructure.</p
 automating a cloud application.</p>
 </div>
 </body></html></div>
-        <hr />
+	
+        <hr>
+
+        <h2>Comments</h2>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'gitzomgreg'; 
+    var disqus_title = 'Cloud Automation - General Form';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     </div>
-		
-
- 
-        
-
- 
-
-    <div class='article'>
-        <a href="../server-lifetime.html"><h2>Server Lifetime as SDLC Metric</h2></a>
-        <div class= "well small"> Tue 08 July 2014
-
-by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
- 
-
-
- </div>
-        <div class="summary"><p class="first last">Server Lifetime as SDLC Metric. Or I like you, that's why I'm going to kill you first.</p>
- <a class="btn btn-info xsmall" href="../server-lifetime.html">read more</a></div>
-    </div>	
-				
-
- 
-        
-
- 
-
-    <div class='article'>
-        <a href="../cloud-management-value-propositions.html"><h2>Cloud Management Value Propositions</h2></a>
-        <div class= "well small"> Mon 20 January 2014
-
-by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
- 
-
-
- </div>
-        <div class="summary"><p class="first last">Cloud Value Propositions</p>
- <a class="btn btn-info xsmall" href="../cloud-management-value-propositions.html">read more</a></div>
-    </div>	
-				
-
- 
-        
-
- 
-
-    <div class='article'>
-        <a href="../cloudy-apps-part-2.html"><h2>Cloudy Apps: Part 2</h2></a>
-        <div class= "well small"> Tue 19 March 2013
-
-by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
- 
-
-
- </div>
-        <div class="summary"><p class="first last">Moving applications to the cloud - Part 2</p>
- <a class="btn btn-info xsmall" href="../cloudy-apps-part-2.html">read more</a></div>
-    </div>	
-				
-
- 
-        
-
- 
-
-    <div class='article'>
-        <a href="../cloudy-apps-part-1.html"><h2>Cloudy Apps: Part 1</h2></a>
-        <div class= "well small"> Tue 19 March 2013
-
-by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
- 
-
-
- </div>
-        <div class="summary"><p class="first last">Moving applications to the cloud - Part 1</p>
- <a class="btn btn-info xsmall" href="../cloudy-apps-part-1.html">read more</a></div>
-    </div>	
-				
-<div class="pagination">
-<ul>
-    <li class="prev disabled"><a href="#">&larr; Previous</a></li>
-
-    <li class="active"><a href="../author/greg-moselle.html">1</a></li>
-    <li class=""><a href="../author/greg-moselle2.html">2</a></li>
-
-    <li class="next"><a href="../author/greg-moselle2.html">Next &rarr;</a></li>
-
-</ul>
-</div>
- 
-  
         </div>
         
         <div class="span3">
@@ -327,8 +246,8 @@ by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
                 Site
                 </li>
             
-                <li><a href="../">Archives</a>
-                <li><a href="../tags.html">Tags</a>
+                <li><a href="./">Archives</a>
+                <li><a href="./tags.html">Tags</a>
                 <li><a href="http://zomgreg.com/" rel="alternate">Atom feed</a></li>
             </ul>
             </div>
@@ -340,9 +259,9 @@ by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
                 Categories
                 </li>
                 
-                <li><a href="../category/cloud.html">Cloud</a></li>
-                <li><a href="../category/linux.html">Linux</a></li>
-                <li><a href="../category/travel.html">Travel</a></li>
+                <li><a href="./category/cloud.html">Cloud</a></li>
+                <li><a href="./category/linux.html">Linux</a></li>
+                <li><a href="./category/travel.html">Travel</a></li>
                    
             </ul>
             </div>
@@ -380,7 +299,7 @@ by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
     </div>     </div> 
 <footer>
 <br />
-<p><a href="..">zomGreg</a> &copy; Greg 2012</p>
+<p><a href=".">zomGreg</a> &copy; Greg 2012</p>
 </footer>
 
 </div> <!-- /container -->
