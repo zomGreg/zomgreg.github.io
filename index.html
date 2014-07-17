@@ -116,7 +116,7 @@ appropriate.</p>
 <li><p class="first">Break it and map the steps to fix the problem.</p>
 <p>Now that the application architecture is created. Pick an essential element
 such as a application node and walk through the steps that need to happen in
-order to restore the application stack to full strength.</p>
+order to restore the application stack to full strength if that node breaks.</p>
 <p>I'll shortly argue that there are a general set of steps involved in this
 process, but this exercise is vital to the task of automating the overall
 application.</p>
@@ -125,6 +125,7 @@ application.</p>
 <p>Scaling is often another expectation for applications deployed to the cloud.
 A similar process to handling breakage can be used in determining the steps
 required to scale the application at each point where scaling is required.</p>
+<p>We'll walk through just such a case next.</p>
 </li>
 </ol>
 </div>
@@ -174,7 +175,8 @@ node is complete, but more on that later.</p>
 </div>
 <p>The steps to notify the web and database tiers should happen almost
 simultaneously. The proper ordering of automation events includes the complete
-configuration <em>but not the starting</em> of the application node's application.</p>
+configuration <em>but not the starting</em> of the application node's application at
+this stage.</p>
 <div class="figure align-center" style="width: 552px; height: auto; max-width: 100%;">
 <img alt="General Application - Notify Dependents" src="./images/application4.png" style="width: 552px; height: auto; max-width: 100%;"/>
 </div>
@@ -220,7 +222,8 @@ other things, knowing:<ul>
 <div class="section" id="wrapping-up">
 <h2>Wrapping Up</h2>
 <p>Automating infrastructure changes via scaling is relatively trivial. The
-interesting part comes when the applications housed upon said infrastructure.</p>
+interesting part comes in the how applications housed upon said infrastructure
+handle such events.</p>
 <p>I hope this post has provided some insight into the consideration required for
 automating a cloud application.</p>
 </div>
