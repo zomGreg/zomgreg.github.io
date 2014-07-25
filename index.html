@@ -83,10 +83,10 @@ by <a class="url fn" href="./author/greg-moselle.html">Greg Moselle</a>
  
         </div>
         
-        <div><html><body><p>Automate application deployment using the cloud! Sure, let's do that, right
+        <div><p>Automate application deployment using the cloud! Sure, let's do that, right
 after we figure out if <a class="reference external" href="./cloudy-apps-part-1.html">the application fits a cloud deployment model</a> and see how well the application is known.</p>
 <p>The goal when planning for application automation in the cloud is to be able to
-push the "go button" and have the application stack be completely deployed
+push the &quot;go button&quot; and have the application stack be completely deployed
 without the involvement of a human being.</p>
 <p>Additionally, should a failure occur, the application stack should be able to
 be restored to full strength without human intervention.</p>
@@ -133,8 +133,8 @@ required to scale the application at each point where scaling is required.</p>
 <h2>Applications - A General Form</h2>
 <p>Many application architectures can be reasonably approximated by three tiers: a
 web, application, and database tier.</p>
-<div class="figure align-center" style="width: 466px; height: auto; max-width: 100%;">
-<img alt="General Application" src="./images/application.png" style="width: 466px; height: auto; max-width: 100%;"/>
+<div class="figure align-center">
+<img alt="General Application" src="./images/application.png" />
 </div>
 <p>As with any approximation, there is some loss of granularity, for example I did
 not include a load balancer in this diagram, as that function can and often is
@@ -146,15 +146,15 @@ Tomcat, many LAMP applications, and others require these elements.</p>
 <h2>Change: A Scaling Event</h2>
 <p>Following the steps listed above, let us follow the case of a scaling event
 that results in the addition of another application node.</p>
-<div class="figure align-center" style="width: 560px; height: auto; max-width: 100%;">
-<img alt="General Application - Scaling Event" src="./images/application2.png" style="width: 560px; height: auto; max-width: 100%;"/>
+<div class="figure align-center">
+<img alt="General Application - Scaling Event" src="./images/application2.png" />
 </div>
 <p>If the process to determine the need to scale was automated, the
 framework/utility in which the application was deployed needs to be able to
 handle such events.</p>
 <p>In any case, once the application node has joined the application tier, what
 are the steps that need to happen to handle this change?</p>
-<p>Generally, scaling should be used to "right size" the pool of resources.
+<p>Generally, scaling should be used to &quot;right size&quot; the pool of resources.
 Scaling results in the addition of extra nodes to meet demand or the reduction
 in the number of nodes in response to decreased demand.</p>
 <p>In this case, an application node has joined the application tier. <em>Dependent</em>
@@ -170,21 +170,21 @@ nodes.</p>
 <p>To make things even more rigorous, the configuration steps taken on the web and
 database tiers should be taken <em>after</em> the configuration of the application
 node is complete, but more on that later.</p>
-<div class="figure align-center" style="width: 640px; height: auto; max-width: 100%;">
-<img alt="General Application - Configure App Node" src="./images/application3.png" style="width: 640px; height: auto; max-width: 100%;"/>
+<div class="figure align-center">
+<img alt="General Application - Configure App Node" src="./images/application3.png" />
 </div>
 <p>The steps to notify the web and database tiers should happen almost
 simultaneously. The proper ordering of automation events includes the complete
 configuration <em>but not the starting</em> of the application node's application at
 this stage.</p>
-<div class="figure align-center" style="width: 552px; height: auto; max-width: 100%;">
-<img alt="General Application - Notify Dependents" src="./images/application4.png" style="width: 552px; height: auto; max-width: 100%;"/>
+<div class="figure align-center">
+<img alt="General Application - Notify Dependents" src="./images/application4.png" />
 </div>
 <p>Once the dependent services are aware of and have made accommodations for the
 newly joined application node, the cloud automation framework should trigger
 the starting of the application on the new application node.</p>
-<div class="figure align-center" style="width: 640px; height: auto; max-width: 100%;">
-<img alt="General Application - Start the App" src="./images/application5.png" style="width: 640px; height: auto; max-width: 100%;"/>
+<div class="figure align-center">
+<img alt="General Application - Start the App" src="./images/application5.png" />
 </div>
 </div>
 <div class="section" id="next-steps">
@@ -227,7 +227,7 @@ handle such events.</p>
 <p>I hope this post has provided some insight into the consideration required for
 automating a cloud application.</p>
 </div>
-</body></html></div>
+</div>
         <hr />
     </div>
 		
@@ -360,6 +360,7 @@ by <a class="url fn" href="./author/greg-moselle.html">Greg Moselle</a>
                 <li><a href="http://iambrianwilliams.com">I am Brian</a></li>
                 <li><a href="http://www.peakscale.com/">PeakScale</a></li>
                 <li><a href="http://blog.lusis.org/">Blog dot Lusis</a></li>
+                <li><a href="http://www.cloudmess.com/">Keith Hudgins</a></li>
                 <li><a href="https://github.com/zomgreg">zomgreg :: github</a></li>
                 <li><a href="http://compete.io/">Compete IO</a></li>
             </ul>

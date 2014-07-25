@@ -77,11 +77,11 @@ by <a class="url fn" href="./author/greg-moselle.html">Greg Moselle</a>
 
         </div>
 	
-        <div><html><body><p>SSH is quite a bit more powerful than most people, myself included, give it
+        <div><p>SSH is quite a bit more powerful than most people, myself included, give it
 credit. I'm often in a position where I need to be able to view http or https
 web pages on a remote system that is not accessible on 80 or 443. The solution
 is to tunnel https traffic over SSH. Here's how it works.</p>
-<img alt="SSH Tunnel Tunnel" src="./images/sshTunnel.png" style="width: 652px; height: auto; max-width: 100%;"/>
+<img alt="SSH Tunnel Tunnel" src="./images/sshTunnel.png" />
 <div class="section" id="the-problem">
 <h2>The Problem</h2>
 <p>I have a web service running on the remote host on port 443, but no access to
@@ -112,7 +112,7 @@ from Home.</p>
 <div class="highlight"><pre>gmoselle@dragonfly:~<span class="nv">$ </span>sudo netstat -an | grep 443
 tcp4       0      0  127.0.0.1.443          *.*                    LISTEN
 </pre></div>
-<p>You must have root privileges to set up a listener on a "standard" port.</p>
+<p>You must have root privileges to set up a listener on a &quot;standard&quot; port.</p>
 </div>
 <div class="section" id="hosts-file">
 <h3>Hosts File</h3>
@@ -123,7 +123,7 @@ service.</p>
 service should appear. Way cool.</p>
 </div>
 </div>
-</body></html></div>
+</div>
 	
         <hr>
 
@@ -181,6 +181,7 @@ service should appear. Way cool.</p>
                 <li><a href="http://iambrianwilliams.com">I am Brian</a></li>
                 <li><a href="http://www.peakscale.com/">PeakScale</a></li>
                 <li><a href="http://blog.lusis.org/">Blog dot Lusis</a></li>
+                <li><a href="http://www.cloudmess.com/">Keith Hudgins</a></li>
                 <li><a href="https://github.com/zomgreg">zomgreg :: github</a></li>
                 <li><a href="http://compete.io/">Compete IO</a></li>
             </ul>
