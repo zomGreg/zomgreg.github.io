@@ -101,8 +101,8 @@ a firewall blocking port 443 traffic between my home host and it.</p>
 </pre></div>
 <p>This command will set up a listener on the <strong>Intermediary Host</strong> on port 8888. As shown:</p>
 <div class="highlight"><pre><span class="o">[</span>root@enf ~<span class="o">]</span><span class="c"># netstat -tnlup | grep ssh</span>
-tcp        0      0 0.0.0.0:22                  0.0.0.0:*                   LISTEN  4461/sshd
-tcp        0      0 127.0.0.1:8888              0.0.0.0:*                   LISTEN 31448/sshd: root
+tcp        <span class="m">0</span>      <span class="m">0</span> 0.0.0.0:22                  0.0.0.0:*                   LISTEN  4461/sshd
+tcp        <span class="m">0</span>      <span class="m">0</span> 127.0.0.1:8888              0.0.0.0:*                   LISTEN 31448/sshd: root
 </pre></div>
 <p>Any traffic hitting the Intermediary host machine on port 8888 will
 automatically be forwarded to the Dell Cloud Manager console machine on port
@@ -115,8 +115,8 @@ from Home.</p>
 <div class="highlight"><pre>sudo ssh -L 443:localhost:8888 root@68.999.999.999 -N
 </pre></div>
 <p>This command will set up a listener on localhost, port 443, as shown.</p>
-<div class="highlight"><pre>gmoselle@dragonfly:~<span class="nv">$ </span>sudo netstat -an | grep 443
-tcp4       0      0  127.0.0.1.443          *.*                    LISTEN
+<div class="highlight"><pre>gmoselle@dragonfly:~<span class="nv">$ </span>sudo netstat -an <span class="p">|</span> grep 443
+tcp4       <span class="m">0</span>      <span class="m">0</span>  127.0.0.1.443          *.*                    LISTEN
 </pre></div>
 <p>You must have root privileges to set up a listener on a &quot;standard&quot; port.</p>
 </div>

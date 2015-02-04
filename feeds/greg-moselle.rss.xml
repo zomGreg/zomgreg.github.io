@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>zomGreg</title><link>http://zomgreg.com/</link><description>A loaded demi-god complex, cock it and pull it.</description><atom:link href="http://zomgreg.com/feeds/greg-moselle.rss.xml" rel="self"></atom:link><lastBuildDate>Wed, 16 Jul 2014 12:47:00 -0500</lastBuildDate><item><title>Cloud Automation - General Form</title><link>http://zomgreg.com/cloud-automation-general-form.html</link><description>&lt;p&gt;Automate application deployment using the cloud! Sure, let's do that, right
+after we figure out if &lt;a class="reference external" href="http://zomgreg.com/cloudy-apps-part-1.html"&gt;the application fits a cloud deployment model&lt;/a&gt; and see how well the application is known.&lt;/p&gt;
+&lt;p&gt;The goal when planning for application automation in the cloud is to be able to
+push the &amp;quot;go button&amp;quot; and have the application stack be completely deployed
+without the involvement of a human being.&lt;/p&gt;
+&lt;p&gt;Additionally, should a failure occur, the application stack should be able to
+be restored to full strength without human intervention.&lt;/p&gt;
+&lt;p&gt;A tall order, no doubt. How to get there from here:&lt;/p&gt;
+&lt;div class="section" id="getting-started"&gt;
+&lt;h2&gt;Getting Started&lt;/h2&gt;
+&lt;p&gt;The first step in planning for deployment of a cloud application is to map out
+the following cases:&lt;/p&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;What are the steps involved in achieving a running application?&lt;/p&gt;
+&lt;p&gt;Starting from building blocks like software build artifacts and a base
+image, for example, how does the application reach a functional state?&lt;/p&gt;
+&lt;p&gt;If part of the steps involves the database team and security teams, include
+them in this discussion.&lt;/p&gt;
+&lt;p&gt;Map the steps out serially as though the goal was to create a tutorial for
+deploying the application. Don't try to automate yet, it will only impede
+later steps.&lt;/p&gt;
+&lt;p&gt;Done with that part? Don't worry if the steps have to be revised, that's
+part of the process.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Draw the finished application architecture.&lt;/p&gt;
+&lt;p&gt;This is usually the first step taken by application designers, and that's
+fine. Try not to group things together that are not alike. For example,
+separate into tiers the web, application, and database elements, as
+appropriate.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Break it and map the steps to fix the problem.&lt;/p&gt;
+&lt;p&gt;Now that the application architecture is created. Pick an essential element
+such as a application node and walk through the steps that need to happen in
+order to restore the application stack to full strength if that node breaks.&lt;/p&gt;
+&lt;p&gt;I'll shortly argue that there are a general set of steps involved in this
+process, but this exercise is vital to the task of automating the overall
+application.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Scale it and map the steps required to accommodate that change.&lt;/p&gt;
+&lt;p&gt;Scaling is often another expectation for applications deployed to the cloud.
+A similar process to handling breakage can be used in determining the steps
+required to scale the application at each point where scaling is required.&lt;/p&gt;
+&lt;p&gt;We'll walk through just such a case next.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="applications-a-general-form"&gt;
+&lt;h2&gt;Applications - A General Form&lt;/h2&gt;
+&lt;p&gt;Many application architectures can be reasonably approximated by three tiers: a
+web, application, and database tier.&lt;/p&gt;
+&lt;div class="figure align-center"&gt;
+&lt;img alt="General Application" src="http://zomgreg.com/images/application.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;As with any approximation, there is some loss of granularity, for example I did
+not include a load balancer in this diagram, as that function can and often is
+performed at the web tier by software such as nginx or apache.&lt;/p&gt;
+&lt;p&gt;A very large amount of applications can be approximated by this diagram.
+Tomcat, many LAMP applications, and others require these elements.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="change-a-scaling-event"&gt;
+&lt;h2&gt;Change: A Scaling Event&lt;/h2&gt;
+&lt;p&gt;Following the steps listed above, let us follow the case of a scaling event
+that results in the addition of another application node.&lt;/p&gt;
+&lt;div class="figure align-center"&gt;
+&lt;img alt="General Application - Scaling Event" src="http://zomgreg.com/images/application2.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;If the process to determine the need to scale was automated, the
+framework/utility in which the application was deployed needs to be able to
+handle such events.&lt;/p&gt;
+&lt;p&gt;In any case, once the application node has joined the application tier, what
+are the steps that need to happen to handle this change?&lt;/p&gt;
+&lt;p&gt;Generally, scaling should be used to &amp;quot;right size&amp;quot; the pool of resources.
+Scaling results in the addition of extra nodes to meet demand or the reduction
+in the number of nodes in response to decreased demand.&lt;/p&gt;
+&lt;p&gt;In this case, an application node has joined the application tier. &lt;em&gt;Dependent&lt;/em&gt;
+services running in the web and database tier are affected by this change. For
+example, nodes in the web tier might need to know about this change in order to
+start directing traffic to the newly christened application node.&lt;/p&gt;
+&lt;p&gt;The database nodes in the database tier need to know to allow for
+incoming traffic from the new application node.&lt;/p&gt;
+&lt;p&gt;The new application node itself also requires information if it is to be a
+fully functional member of the application stack. It needs to know how to reach
+and authenticate to the database nodes, and to allow for traffic from the web
+nodes.&lt;/p&gt;
+&lt;p&gt;To make things even more rigorous, the configuration steps taken on the web and
+database tiers should be taken &lt;em&gt;after&lt;/em&gt; the configuration of the application
+node is complete, but more on that later.&lt;/p&gt;
+&lt;div class="figure align-center"&gt;
+&lt;img alt="General Application - Configure App Node" src="http://zomgreg.com/images/application3.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;The steps to notify the web and database tiers should happen almost
+simultaneously. The proper ordering of automation events includes the complete
+configuration &lt;em&gt;but not the starting&lt;/em&gt; of the application node's application at
+this stage.&lt;/p&gt;
+&lt;div class="figure align-center"&gt;
+&lt;img alt="General Application - Notify Dependents" src="http://zomgreg.com/images/application4.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;Once the dependent services are aware of and have made accommodations for the
+newly joined application node, the cloud automation framework should trigger
+the starting of the application on the new application node.&lt;/p&gt;
+&lt;div class="figure align-center"&gt;
+&lt;img alt="General Application - Start the App" src="http://zomgreg.com/images/application5.png" /&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="next-steps"&gt;
+&lt;h2&gt;Next Steps&lt;/h2&gt;
+&lt;p&gt;In this example we handled a generic scaling case involving the addition of a
+new node to an application tier.&lt;/p&gt;
+&lt;p&gt;After presenting the process for automating an example application in this way,
+the question I most often receive is: That's nice for &lt;em&gt;your&lt;/em&gt; application, will
+it work for mine?&lt;/p&gt;
+&lt;p&gt;This question is akin to asking if addition will work on adding your numbers
+like it did on mine.&lt;/p&gt;
+&lt;p&gt;The answer is, wait for it, it depends. The short answer is it depends on how
+well you know the application being automated.&lt;/p&gt;
+&lt;p&gt;To find out whether or not your application can be automated in this way, start
+with a couple of assumptions:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;The cloud automation framework shown in the diagram exists. Hint: it does.&lt;/li&gt;
+&lt;li&gt;The framework passes information to nodes that need it, when they need it.&lt;/li&gt;
+&lt;li&gt;The information is passed securely, and is configurable.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Next, ask these questions:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;How well do you know the application being automated? This means, among
+other things, knowing:&lt;ul&gt;
+&lt;li&gt;Where are the configuration files for the application?&lt;/li&gt;
+&lt;li&gt;What are the steps involved in starting up the application?&lt;/li&gt;
+&lt;li&gt;Are there any dependencies for the application such as databases and load balancers?&lt;/li&gt;
+&lt;li&gt;If dependencies exist, how can they be notified of failures or scaling?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;What steps need to happen in the event of failure?&lt;/li&gt;
+&lt;li&gt;What steps need to happen in the event of scaling?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="wrapping-up"&gt;
+&lt;h2&gt;Wrapping Up&lt;/h2&gt;
+&lt;p&gt;Automating infrastructure changes via scaling is relatively trivial. The
+interesting part comes in the how applications housed upon said infrastructure
+handle such events.&lt;/p&gt;
+&lt;p&gt;I hope this post has provided some insight into the consideration required for
+automating a cloud application.&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Greg Moselle</dc:creator><pubDate>Wed, 16 Jul 2014 12:47:00 -0500</pubDate><guid>tag:zomgreg.com,2014-07-16:cloud-automation-general-form.html</guid><category>Cloud</category></item><item><title>Server Lifetime as SDLC Metric</title><link>http://zomgreg.com/server-lifetime.html</link><description>&lt;p&gt;Earlier we looked at gaining insight into &lt;a class="reference external" href="http://zomgreg.com/driving-devops.html"&gt;the DevOps-ification&lt;/a&gt; of an organization.&lt;/p&gt;
+&lt;p&gt;Let's look at using server &amp;quot;lifespan&amp;quot; as a metric for gauging the cloudiness of
+a software development life cycle (SDLC) work flow.&lt;/p&gt;
+&lt;p&gt;Learn to treat servers like code, strive to automate server deploys and you
+will soon find yourself telling your servers:&lt;/p&gt;
+&lt;p&gt;I like you, that's why I'm going to kill you first.&lt;/p&gt;
+&lt;div class="section" id="ephemeral-embrace"&gt;
+&lt;h2&gt;Ephemeral Embrace&lt;/h2&gt;
+&lt;p&gt;The ephemeral nature of cloud servers is a concept that seems like it should be
+straightforward to adopt, but in my experience embracing the ephemerality of a
+VM is something most organizations/teams are not yet ready to do. Why not? I
+have a couple of ideas:&lt;/p&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;They have immature infrastructure management practices.&lt;/p&gt;
+&lt;p&gt;Even organizations that have largely virtualized their infrastructure
+continue to enforce draconian change control and procurement policies. Some
+managers with whom I've interacted have indicated it takes 9 days from the time
+a user requests a virtual machine to the time the resource is delivered to the
+end user. 9. Days. We'd bleed personnel if it took them more than 9 minutes to
+get a VM.&lt;/p&gt;
+&lt;p&gt;If it takes 9 days to obtain a needed resource, as a user I'd sure as hell
+hold onto that VM for as long as I could.&lt;/p&gt;
+&lt;p&gt;The same manager responsible for the 9-day procurement time is also
+convinced that if users are able to provision their own virtual severs, they
+would provision ad infinitum. I wonder why...&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;They have immature SDLC work flows.&lt;/p&gt;
+&lt;p&gt;On my team, the build-test-dev cycle is a continuous efficiency loop. To
+build artifacts from source, deploy, and test should take less than 15 minutes.
+That's including the provisioning of a cloud server upon which the code is
+deployed. Want to reproduce a problem? Pull the tag, deploy, and build.&lt;/p&gt;
+&lt;p&gt;Many organizations/teams implement this cycle on static server farms, and miss
+out on leveraging the benefits of using configuration management and ephemeral
+cloud servers to implement a true end-to-end development cycle.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="measuring-ephemerality"&gt;
+&lt;h2&gt;Measuring Ephemerality&lt;/h2&gt;
+&lt;p&gt;One prominent software company uses server lifespan as a measure of the
+efficiency of their SDLC processes.&lt;/p&gt;
+&lt;p&gt;Their target server lifespan is 30 hours. That is, from the time a cloud server
+is instantiated to the time it is destroyed, no more than 30 hours should have
+elapsed.&lt;/p&gt;
+&lt;p&gt;And when the servers are destroyed, that means destroyed, not snapshotted, not
+imaged, not archived. Really gone.&lt;/p&gt;
+&lt;p&gt;For how many hours has your development environment been in existence?&lt;/p&gt;
+&lt;p&gt;The maturity of a cloudy SDLC ensures a repeatable, collaborative, iterative,
+fail-friendly approach to software development.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="cattle-not-pets"&gt;
+&lt;h2&gt;Cattle not Pets&lt;/h2&gt;
+&lt;p&gt;Over at &lt;a class="reference external" href="https://blog.engineyard.com/2014/pets-vs-cattle"&gt;Engine Yard&lt;/a&gt;
+there's a good post about cloud servers and how treating them as ephemeral
+entities can transform software development work flows.&lt;/p&gt;
+&lt;p&gt;My colleague at &lt;a class="reference external" href="http://blog.lusis.org/"&gt;blog dot lusis&lt;/a&gt; advocates for the &amp;quot;get it working,
+then tear it down, then get it working again&amp;quot; approach until the process is
+fully repeatable.&lt;/p&gt;
+&lt;p&gt;Server builds not working? Shoot the server in the head and do it again until
+it works.&lt;/p&gt;
+&lt;p&gt;As an animal lover I'm not the biggest fan of these analogies, so I'll go with
+the Buddhism concept of Bhavachakra, the wheel of life. The process of birth
+and rebirth of existence.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="ephemeral-transformation"&gt;
+&lt;h2&gt;Ephemeral Transformation&lt;/h2&gt;
+&lt;p&gt;As cloudy software practices mature, and as the dev-test process matures,
+expect users to become more and more self-sufficient and efficient at software
+delivery.&lt;/p&gt;
+&lt;p&gt;Users, operations and development alike, will begin to treat servers as
+temporary entities, deployed repeatably and reliably.&lt;/p&gt;
+&lt;div class="figure align-center"&gt;
+&lt;img alt="Server Lifespan" src="http://zomgreg.com/images/server_lifespan.png" /&gt;
+&lt;/div&gt;
+&lt;p&gt;Note the extraordinary increase in monthly server creation volume starting in
+2013-03. It corresponds directly to a precipitous decrease in average server
+lifetime.&lt;/p&gt;
+&lt;p&gt;The last data point in 2013-11 represents 4705 server launches with an average
+lifespan of 19.4 hours.&lt;/p&gt;
+&lt;p&gt;The inflection point starting at 2013-03 represents a mature infrastructure
+management process. Users can be added to the system programmatically and
+start provisioning virtual resources in less than one hour.&lt;/p&gt;
+&lt;p&gt;Additionally, software teams began to fully leverage the flexibility of the
+cloud and created fast development work flows&lt;/p&gt;
+&lt;p&gt;Another takeaway message is an insight into server sprawl. The total launch
+count for the months shown is 67882. The cloud capacity for running servers is
+significantly less than this number, and due to the mature infrastructure
+management processes, there is no problem of sprawl. Not shown in this chart is
+a nearly equal number of server terminations when viewed in a month-over-month
+basis.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="summary"&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Targeting a low average server lifespan is critical for some software
+development processes, primarily the development and test phases.&lt;/p&gt;
+&lt;p&gt;In other cases, a longer server lifespan can be an indicator of reliability.&lt;/p&gt;
+&lt;p&gt;Using cloud infrastructure to facilitate the maturation software processes is a
+perfect use case for the cloud.&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Greg Moselle</dc:creator><pubDate>Tue, 08 Jul 2014 12:47:00 -0500</pubDate><guid>tag:zomgreg.com,2014-07-08:server-lifetime.html</guid><category>Cloud</category></item><item><title>Cloud Management Value Propositions</title><link>http://zomgreg.com/cloud-management-value-propositions.html</link><description>&lt;p&gt;I was recently challenged to distill the value propositions of a cloud
+management technology into three success criteria. Consumers of cloud
+management technology are interested in:&lt;/p&gt;
+&lt;p&gt;1. Multi-cloud Management. The ability to manage multiple cloud accounts with a
+single user interface and API.&lt;/p&gt;
+&lt;p&gt;2. Bring self-provisioning to the end user. Empower the demand-side of cloud
+resources to provision their own resources quickly and securely.&lt;/p&gt;
+&lt;p&gt;3. Transparency for managers. Enable managers to gain programmatic insight into
+cloud use.&lt;/p&gt;
+&lt;div class="section" id="multi-cloud-management"&gt;
+&lt;h2&gt;Multi-Cloud Management&lt;/h2&gt;
+&lt;p&gt;Multi-cloud management is no small technological success. Bringing the ability
+to manage disparate cloud technologies under a single user interface is orders
+of magnitude more empowering that managing several email accounts with a single
+application. While the user interface typically garners the most attention, I'd
+argue the API is the most interesting facet of the multi-cloud management
+platform.&lt;/p&gt;
+&lt;p&gt;Consider the agility a mutli-cloud API brings to an organization. One customer
+I'm currently working with is interested in being able to &amp;quot;fail fast&amp;quot;. Take
+that objective for what it's worth, but it's sound engineering practice. A
+multi-cloud API allows for rapid cross-cloud prototyping without all the
+overhead of building separate modules for each cloud. The API is where it's
+possible bring the best of what each cloud has to offer to the end user.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="self-provisioning"&gt;
+&lt;h2&gt;Self Provisioning&lt;/h2&gt;
+&lt;p&gt;Bringing self-provisioning to the end user is where there is the most ground to
+be gained in winning cloud technology converts. For example, I've experienced
+lead times for procuring compute resources that extend up to 4 weeks for a
+&lt;em&gt;virtual&lt;/em&gt; server.&lt;/p&gt;
+&lt;p&gt;I've also heard anecdotal reports of up to 6 weeks for the same. Empowering
+users to self-provision compute resources such as virtual machines and storage
+on the order of minutes will leave them feeling like they've seen the face of
+god.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="transparency"&gt;
+&lt;h2&gt;Transparency&lt;/h2&gt;
+&lt;p&gt;Finally, with all the self-provisioning that accompanies user enablement, a
+need for transparency will arise. The ability to gain insight into cloud
+use/adoption is valuable for understanding the costs involved and how consumers
+are actually using the technology.&lt;/p&gt;
+&lt;p&gt;While cost might be the most obvious metric for tracking cloud infrastructure
+use, another metric that may be equally compelling is virtual machine lifetime.
+Traditionally, infrastructure is provisioned and left to exist for as much time
+as possible, even if the original reason for the procurement has changed.
+Furthermore, the longer the length of time for which a piece of infrastructure
+exists is often a viewed as a positive indicator.&lt;/p&gt;
+&lt;p&gt;In a cloudy infrastructure environment, the opposite metric can apply. One
+manager of a virtual infrastructure environment told me the metric she's
+tracking for VM lifetime is 30 days. Any machine in existence for longer than
+30 days is viewed as a candidate for termination because it's more likely that
+VM is forgotten and lost in the cloud than performing a useful function.&lt;/p&gt;
+&lt;p&gt;Multi-cloud, self-provisioning, and visibility are three key value propositions
+for a successful cloud management solution.&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Greg Moselle</dc:creator><pubDate>Mon, 20 Jan 2014 11:10:00 -0600</pubDate><guid>tag:zomgreg.com,2014-01-20:cloud-management-value-propositions.html</guid><category>Cloud</category></item><item><title>Cloudy Apps: Part 2</title><link>http://zomgreg.com/cloudy-apps-part-2.html</link><description>&lt;p&gt;In &lt;a class="reference external" href="http://zomgreg.com/cloudy-apps-part-1.html"&gt;part one&lt;/a&gt; we looked at cloud application deployment from a
+know-thy-app and cloud-independent perspective. In this part, we'll look at scaling and
+notifications.&lt;/p&gt;
+&lt;div class="section" id="scaling"&gt;
+&lt;h2&gt;Scaling&lt;/h2&gt;
+&lt;p&gt;I saved scaling for last on purpose because although scaling is the sexy thing
+to do in the cloud, being able to scale properly depends on satisfying the
+above requirements.&lt;/p&gt;
+&lt;p&gt;The process for determining the scalability of an application is similar to the
+one used to determine how well the application is known. Use the application
+diagram again and step through the addition of a node to the application
+tier/group, keeping in mind the following questions:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;What should trigger that scaling event?&lt;/li&gt;
+&lt;li&gt;When scaling occurs at the application layer, what components in the application
+architecture should be notified of that event?&lt;/li&gt;
+&lt;li&gt;What configuration file changes on dependent services does the addition/subtraction of
+a node at the application layer necessitate?&lt;/li&gt;
+&lt;li&gt;What firewall changes need to be made to accommodate the addition of a new node or the
+subtraction of a terminated node?&lt;/li&gt;
+&lt;li&gt;What notifications should be sent when scaling occurs?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Repeat this process for every logical grouping of scalable resources.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="scaling-triggers"&gt;
+&lt;h2&gt;Scaling Triggers&lt;/h2&gt;
+&lt;p&gt;From an infrastructure perspective, scaling is trivial: start new nodes when
+they're needed, terminate nodes when they're not.&lt;/p&gt;
+&lt;p&gt;Scaling should be triggered by a metric that means something to your
+application. Scaling based on CPU/Memory metrics is likely not the best means
+to determine the scaling needs of your application for two reasons.&lt;/p&gt;
+&lt;p&gt;First, high CPU/Memory usage can be caused by operating system processes other
+than those that are driving your application. Second, although your node
+&lt;em&gt;thinks&lt;/em&gt; it has a CPU, it actually has the hypervisor representation of a CPU,
+and the metrics presented to the OS are necessarily second-hand.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="dependencies"&gt;
+&lt;h2&gt;Dependencies&lt;/h2&gt;
+&lt;p&gt;The next three items are really about handling dependencies. Generically,
+dependencies are the questions that have to be satisfied when changes occur in
+one layer of an application architecture.&lt;/p&gt;
+&lt;p&gt;An example of a dependency is when an application node joins or leaves the
+application group, the database group should be notified of this change to, for
+example, execute a grant/revoke routine to grant/revoke access to a node that
+joins/leaves the application group.&lt;/p&gt;
+&lt;p&gt;Dependency satisfaction should be facilitated by the cloud
+orchestration/automation framework being used to deploy and manage the
+application stack.&lt;/p&gt;
+&lt;p&gt;The changes that are triggered during dependency handling should be:&lt;/p&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;Predictable&lt;/p&gt;
+&lt;p&gt;The scaling triggers will govern when the dependencies need to be handled.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Idempotent&lt;/p&gt;
+&lt;p&gt;The process that satisfies the dependencies should be able to be run many times,
+producing the same output.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="section" id="notifications"&gt;
+&lt;h3&gt;Notifications&lt;/h3&gt;
+&lt;p&gt;Notifications are really about handling the governance aspect of application
+automation.  When changes/scaling occurs in a scaling group or firewall, are
+those events published to an API endpoint, message queue, email, or SMS?&lt;/p&gt;
+&lt;p&gt;Getting insight into what has happened as automated events affect your
+application is critical for being able to create after-action reports,
+lessons-learned, and process improvement.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="summary"&gt;
+&lt;h2&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Deploying applications into the cloud doesn't have to suck. With preparation,
+knowledge of the application, implementation of an automation/orchestration
+framework, and a notification system, you can surely control all of the aspects
+necessary for moving applications into the cloud.&lt;/p&gt;
+&lt;p&gt;Finally, not all applications are destined for the cloud, and that's okay.
+Although I work in the cloud every day, I'll freely admit that the cloud
+operating environment has limitations that prohibit some applications from
+living in a cloud. Use the guidelines here to help identify candidate
+applications for migration to the cloud.&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Greg Moselle</dc:creator><pubDate>Tue, 19 Mar 2013 19:45:00 -0500</pubDate><guid>tag:zomgreg.com,2013-03-19:cloudy-apps-part-2.html</guid><category>Cloud</category></item><item><title>Cloudy Apps: Part 1</title><link>http://zomgreg.com/cloudy-apps-part-1.html</link><description>&lt;p&gt;Moving applications into the cloud is popular: elastic beanstalk, heroku, and
+others all make it very easy to move applications into the cloud. The drawback
+to these products is that they serve a very narrow market, or more
+specifically, a very narrow application segment.&lt;/p&gt;
+&lt;p&gt;What if your application doesn't fit the oft-referenced Linux, Apache, MySQL,
+P{ython,HP,erl} (LAMP) architecture? What if your application is deployed using
+JBOSS, Tomcat, Jetty, or some other framework altogether?&lt;/p&gt;
+&lt;p&gt;A colleague of mine is quick to point out that the opportunity to migrate a
+'traditional' application to the cloud space can be somewhat limited. The
+limitation most likely comes from the cloud not being a one-cloud-fits-all
+application deployment space.&lt;/p&gt;
+&lt;p&gt;Fortunately, there are approaches to deploying in the cloud that meet what I
+consider to be the requirements for operating an application in the cloud:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;Set reasonable expectations.&lt;/li&gt;
+&lt;li&gt;Know your application.&lt;/li&gt;
+&lt;li&gt;Hypervisor agnostic, cloud independent.&lt;/li&gt;
+&lt;li&gt;Scalable&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="section" id="set-reasonable-expectations"&gt;
+&lt;h2&gt;Set Reasonable Expectations&lt;/h2&gt;
+&lt;p&gt;If you think you can &amp;quot;just use Chef&amp;quot; to deploy your application, you're wrong.
+Here's why: Products like Chef, Puppet, Enstratius, and others are only as
+smart as you make them. If part of meeting your deadline of T + 1 month for
+production release is that your team learn Chef, then you're in for an
+unpleasant surprise.&lt;/p&gt;
+&lt;p&gt;Saying &amp;quot;we'll just use Chef&amp;quot; to solve all of our cloud application problems is
+the equivalent of saying &amp;quot;we'll just use a calculator&amp;quot; to pass the Calculus
+exam. Chef, Puppet, and Enstratius are extraordinarily powerful cloud
+orchestration/automation frameworks, but they're not without a learning curve.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="take-away"&gt;
+&lt;h2&gt;Take Away&lt;/h2&gt;
+&lt;p&gt;You'll end up paying your technical debt one way or the other, planning for it
+will help take some of the sting out of that process.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="know-thy-application"&gt;
+&lt;h2&gt;Know Thy Application&lt;/h2&gt;
+&lt;p&gt;This requirement cannot be overstated. Although this requirement seems obvious,
+it's unfortunately the first place most would-be cloud application developers
+fail.&lt;/p&gt;
+&lt;p&gt;Pull out (or create) an application blueprint or architecture diagram and
+examine it for components or routines that require manual (human) intervention
+and mark those items as those in need of special attention.&lt;/p&gt;
+&lt;p&gt;Here's an exercise I use to determine the cloudiness potential of an
+application: Using the application architecture diagram, pick a node or
+component and walk through the exercise of what needs to happen to the
+architecture as a whole when a failure of that node occurs.&lt;/p&gt;
+&lt;p&gt;If one of the things that happens during that failure event is a PagerDuty
+alert is sent to the on-call sysadmin so he/she can change all the DNS entries
+that need to be updated, that's a good indication the application is not yet
+ready to be deployed to the cloud.&lt;/p&gt;
+&lt;div class="section" id="configuration-files"&gt;
+&lt;h3&gt;Configuration Files&lt;/h3&gt;
+&lt;p&gt;I was once on site to work though some early cloud initiatives, one of which
+was the migration of an application running in the data center to a cloud
+environment. One of my first questions was where are all the configuration
+files that are used to configure all of the applications and databases
+comprising the application.&lt;/p&gt;
+&lt;p&gt;The answer was disheartening from two perspectives. First, the application
+configuration files were scattered not just between a couple of developers and
+sysadmins, but in separate departments that required a monthly meeting to
+schedule a change. This did not bode well for the scaling objective.&lt;/p&gt;
+&lt;p&gt;Second, I was informed that it was an unreasonable request that the application
+owner know where every single configuration for the application was held.
+Smiling? I wasn't. :)&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="firewalls"&gt;
+&lt;h2&gt;Firewalls&lt;/h2&gt;
+&lt;p&gt;One of the trickiest parts of automating a cloud application can be the
+creation and updating of firewall rules. This goes for host-level firewalls
+like iptables but for cloud-based firewalls/security groups that are present in
+many clouds. If part of the application modification process is to schedule a
+firewall modification weeks in advance, your application is not cloud ready.&lt;/p&gt;
+&lt;p&gt;Network security professionals often cringe at the thought of firewalls being
+manually updated, but that time is here. Audit the plan, audit the result, but
+most importantly audit the &lt;em&gt;process&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="id1"&gt;
+&lt;h2&gt;Take Away&lt;/h2&gt;
+&lt;p&gt;Knowing where all of your configuration files live and how they're created and
+updated is critical whether you're using Chef, Puppet, Enstratius, or any other
+cloud framework for application deployment.&lt;/p&gt;
+&lt;div class="section" id="hypervisor-agnostic-cloud-independent"&gt;
+&lt;h3&gt;Hypervisor Agnostic, Cloud Independent&lt;/h3&gt;
+&lt;p&gt;A cloudy application is decoupled from the underlying infrastructure. The
+application should not rely on Xencenter, ESX/VMWare, KVM, or any other
+hypervisor technology.&lt;/p&gt;
+&lt;p&gt;The particular hypervisor in use by a cloud vendor should be of no concern to
+the cloud application architect.&lt;/p&gt;
+&lt;p&gt;If your application depends on cloud (or worse) vendor specific technologies
+down at the cloud layer, this should serve as an indication that at best your
+application is not able to operate in a multi-cloud environment. This may be
+okay in the short term, but in the long term, vendor lock-in at this layer will
+become very problematic as the cloud space matures.&lt;/p&gt;
+&lt;p&gt;It's already a multi-cloud world, and marrying an application to a particular
+set of vendor tools is an inflexible approach to cloud application deployment.
+The application should leverage, not rely entirely on, specific cloud products.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="id2"&gt;
+&lt;h2&gt;Take Away&lt;/h2&gt;
+&lt;p&gt;Even if your current initiatives don't include a multi-cloud environment,
+future-proof your processes by accepting that at some point in the future, your
+application will have to be multi-cloud capable.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="summary-part-1"&gt;
+&lt;h2&gt;Summary (Part 1)&lt;/h2&gt;
+&lt;p&gt;Have a full knowledge of your cloud application, and plan your application
+deployment for a cloud- and hypervisor-independent solution.&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Greg Moselle</dc:creator><pubDate>Tue, 19 Mar 2013 18:45:00 -0500</pubDate><guid>tag:zomgreg.com,2013-03-19:cloudy-apps-part-1.html</guid><category>Cloud</category></item><item><title>SSH Tunnel</title><link>http://zomgreg.com/ssh-tunnel.html</link><description>&lt;p&gt;SSH is quite a bit more powerful than most people, myself included, give it
+credit. I'm often in a position where I need to be able to view http or https
+web pages on a remote system that is not accessible on 80 or 443. The solution
+is to tunnel https traffic over SSH. Here's how it works.&lt;/p&gt;
+&lt;img alt="SSH Tunnel Tunnel" src="http://zomgreg.com/images/sshTunnel.png" /&gt;
+&lt;div class="section" id="the-problem"&gt;
+&lt;h2&gt;The Problem&lt;/h2&gt;
+&lt;p&gt;I have a web service running on the remote host on port 443, but no access to
+that system because it only has a private IP address, for one thing, and it has
+a firewall blocking port 443 traffic between my home host and it.&lt;/p&gt;
+&lt;p&gt;The remote host does allow SSH traffic on port 22 from the intermediary host.&lt;/p&gt;
+&lt;p&gt;To tunnel https traffic to my localhost from the remote host, I do this:&lt;/p&gt;
+&lt;div class="section" id="on-remote-host"&gt;
+&lt;h3&gt;On Remote Host&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;ssh -R *:8888:localhost:443 root@192.168.122.1 -N
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This command will set up a listener on the &lt;strong&gt;Intermediary Host&lt;/strong&gt; on port 8888. As shown:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;[&lt;/span&gt;root@enf ~&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="c"&gt;# netstat -tnlup | grep ssh&lt;/span&gt;
+tcp        &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt; 0.0.0.0:22                  0.0.0.0:*                   LISTEN  4461/sshd
+tcp        &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt; 127.0.0.1:8888              0.0.0.0:*                   LISTEN 31448/sshd: root
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Any traffic hitting the Intermediary host machine on port 8888 will
+automatically be forwarded to the Dell Cloud Manager console machine on port
+443, which is where the web service is listening.&lt;/p&gt;
+&lt;p&gt;However, since it's only listening on 127.0.0.1, we cannot yet access the web service
+from Home.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="on-home-host"&gt;
+&lt;h3&gt;On Home Host&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;sudo ssh -L 443:localhost:8888 root@68.999.999.999 -N
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This command will set up a listener on localhost, port 443, as shown.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;gmoselle@dragonfly:~&lt;span class="nv"&gt;$ &lt;/span&gt;sudo netstat -an &lt;span class="p"&gt;|&lt;/span&gt; grep 443
+tcp4       &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;  127.0.0.1.443          *.*                    LISTEN
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You must have root privileges to set up a listener on a &amp;quot;standard&amp;quot; port.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="hosts-file"&gt;
+&lt;h3&gt;Hosts File&lt;/h3&gt;
+&lt;p&gt;Finally, to complete the tunnel, I make a hosts file entry so I can access the web
+service.&lt;/p&gt;
+&lt;p&gt;127.0.0.1 cloud.myremoteconsole.com&lt;/p&gt;
+&lt;p&gt;Open a browser, and navigate to &lt;a class="reference external" href="https://localhost"&gt;https://localhost&lt;/a&gt; and the remote remote web
+service should appear. Way cool.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Greg Moselle</dc:creator><pubDate>Mon, 30 Jul 2012 14:28:00 -0500</pubDate><guid>tag:zomgreg.com,2012-07-30:ssh-tunnel.html</guid><category>Linux</category></item><item><title>Leaving on a Jet Plane</title><link>http://zomgreg.com/leaving-on-a-jet-plane.html</link><description>&lt;p&gt;I've been traveling quite a bit last year and this year.  I grabbed my historical flight
+information from the Delta website and used a little awk and a little gnuplot to make some
+graphs.&lt;/p&gt;
+&lt;p&gt;Here they are:&lt;/p&gt;
+&lt;div class="figure align-right"&gt;
+&lt;img alt="2011 Flight Summary" src="http://zomgreg.com/images/2011.png" /&gt;
+&lt;p class="caption"&gt;Testing Caption&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;2011 saw more international flights than this year (so far). Had some flights to Seoul and
+Tel Aviv which helped to drive up the average miles/flight number.&lt;/p&gt;
+&lt;img alt="2012 Flight Summary" src="http://zomgreg.com/images/2012.png" /&gt;
+&lt;p&gt;2012 has been many trips to the San Fransisco bay area. Since I love Northern
+California, it's no real tragedy to be headed there.&lt;/p&gt;
+&lt;div class="section" id="how-did-i-do-this"&gt;
+&lt;h2&gt;How did I do this?&lt;/h2&gt;
+&lt;p&gt;To make these graphs, I used a combination of awk and gnuplot. I started with a file that
+looked like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;08-Apr-2011 979
+10-Apr-2011 979
+08-May-2011 936
+13-May-2011 6552
+13-May-2011 6552
+21-May-2011 936
+29-May-2011 4222
+30-May-2011 2043
+15-Jun-2011 5677
+15-Jun-2011 1028
+26-Jul-2011 1589
+31-Jul-2011 1589
+04-Oct-2011 1310
+08-Oct-2011 957
+08-Oct-2011 528
+07-Nov-2011 1310
+10-Nov-2011 957
+10-Nov-2011 528
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Where the first column is the date the flight posted to my skymiles account and the second
+column is the number of actual miles flown, not the MQM or bonus values.&lt;/p&gt;
+&lt;div class="section" id="enter-awk"&gt;
+&lt;h3&gt;Enter Awk&lt;/h3&gt;
+&lt;p&gt;Using this information, I wrote a small awk script like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;BEGIN&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+  &lt;span class="c1"&gt;#initialize some variables&lt;/span&gt;
+  &lt;span class="nx"&gt;sum&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+  &lt;span class="c1"&gt;# Compute a running total of miles&lt;/span&gt;
+  &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="nx"&gt;sum&lt;/span&gt;&lt;span class="o"&gt;+=$&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+
+  &lt;span class="c1"&gt;# Print out the date, miles, running total, and running average&lt;/span&gt;
+  &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="kr"&gt;print&lt;/span&gt; &lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;sum&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;NR&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The output looks like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;08-Apr-2011 &lt;span class="m"&gt;979&lt;/span&gt; &lt;span class="m"&gt;979&lt;/span&gt; 979
+10-Apr-2011 &lt;span class="m"&gt;979&lt;/span&gt; &lt;span class="m"&gt;1958&lt;/span&gt; 979
+08-May-2011 &lt;span class="m"&gt;936&lt;/span&gt; &lt;span class="m"&gt;2894&lt;/span&gt; 964.667
+13-May-2011 &lt;span class="m"&gt;6552&lt;/span&gt; &lt;span class="m"&gt;9446&lt;/span&gt; 2361.5
+13-May-2011 &lt;span class="m"&gt;6552&lt;/span&gt; &lt;span class="m"&gt;15998&lt;/span&gt; 3199.6
+21-May-2011 &lt;span class="m"&gt;936&lt;/span&gt; &lt;span class="m"&gt;16934&lt;/span&gt; 2822.33
+29-May-2011 &lt;span class="m"&gt;4222&lt;/span&gt; &lt;span class="m"&gt;21156&lt;/span&gt; 3022.29
+30-May-2011 &lt;span class="m"&gt;2043&lt;/span&gt; &lt;span class="m"&gt;23199&lt;/span&gt; 2899.88
+15-Jun-2011 &lt;span class="m"&gt;5677&lt;/span&gt; &lt;span class="m"&gt;28876&lt;/span&gt; 3208.44
+15-Jun-2011 &lt;span class="m"&gt;1028&lt;/span&gt; &lt;span class="m"&gt;29904&lt;/span&gt; 2990.4
+26-Jul-2011 &lt;span class="m"&gt;1589&lt;/span&gt; &lt;span class="m"&gt;31493&lt;/span&gt; 2863
+31-Jul-2011 &lt;span class="m"&gt;1589&lt;/span&gt; &lt;span class="m"&gt;33082&lt;/span&gt; 2756.83
+04-Oct-2011 &lt;span class="m"&gt;1310&lt;/span&gt; &lt;span class="m"&gt;34392&lt;/span&gt; 2645.54
+08-Oct-2011 &lt;span class="m"&gt;957&lt;/span&gt; &lt;span class="m"&gt;35349&lt;/span&gt; 2524.93
+08-Oct-2011 &lt;span class="m"&gt;528&lt;/span&gt; &lt;span class="m"&gt;35877&lt;/span&gt; 2391.8
+07-Nov-2011 &lt;span class="m"&gt;1310&lt;/span&gt; &lt;span class="m"&gt;37187&lt;/span&gt; 2324.19
+10-Nov-2011 &lt;span class="m"&gt;957&lt;/span&gt; &lt;span class="m"&gt;38144&lt;/span&gt; 2243.76
+10-Nov-2011 &lt;span class="m"&gt;528&lt;/span&gt; &lt;span class="m"&gt;38672&lt;/span&gt; 2148.44
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I saved that output to a file, and turned to gnuplot.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="now-gnuplot"&gt;
+&lt;h3&gt;Now GNUplot&lt;/h3&gt;
+&lt;p&gt;An example of the gnuplot script for the 2011 image is here:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/opt/local/bin/gnuplot&lt;/span&gt;
+
+&lt;span class="nb"&gt;set &lt;/span&gt;xdata &lt;span class="nb"&gt;time&lt;/span&gt;
+&lt;span class="nb"&gt;set &lt;/span&gt;timefmt &lt;span class="s2"&gt;&amp;quot;%d-%b-%Y&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;set &lt;/span&gt;xlabel &lt;span class="s2"&gt;&amp;quot;Date&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;set &lt;/span&gt;format x &lt;span class="s2"&gt;&amp;quot;%m-%Y&amp;quot;&lt;/span&gt;
+
+&lt;span class="nb"&gt;set &lt;/span&gt;ylabel &lt;span class="s2"&gt;&amp;quot;Total Miles&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;set &lt;/span&gt;y2range &lt;span class="o"&gt;[&lt;/span&gt;0:7000&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;span class="nb"&gt;set &lt;/span&gt;y2label &lt;span class="s2"&gt;&amp;quot;Average Miles/Flight \n Individual Flights&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;set &lt;/span&gt;y2tic 0,1000
+
+&lt;span class="nb"&gt;set &lt;/span&gt;title &lt;span class="s2"&gt;&amp;quot;2011 Flight Statistics&amp;quot;&lt;/span&gt;
+&lt;span class="nb"&gt;set &lt;/span&gt;key bmargin
+
+plot &lt;span class="s2"&gt;&amp;quot;summary.dat&amp;quot;&lt;/span&gt; using 1:3 title &lt;span class="s2"&gt;&amp;quot;Total Miles&amp;quot;&lt;/span&gt; lt &lt;span class="m"&gt;3&lt;/span&gt; lw &lt;span class="m"&gt;2&lt;/span&gt; smooth bezier, &lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="s2"&gt;&amp;quot;summary.dat&amp;quot;&lt;/span&gt; using 1:4 lt &lt;span class="m"&gt;2&lt;/span&gt; lw &lt;span class="m"&gt;2&lt;/span&gt; smooth bezier title &lt;span class="s2"&gt;&amp;quot;Average miles/flight&amp;quot;&lt;/span&gt; axes x1y2, &lt;span class="se"&gt;\&lt;/span&gt;
+&lt;span class="s2"&gt;&amp;quot;summary.dat&amp;quot;&lt;/span&gt; using 1:2 title &lt;span class="s2"&gt;&amp;quot;Flights&amp;quot;&lt;/span&gt; with impulses lt &lt;span class="m"&gt;4&lt;/span&gt; lw &lt;span class="m"&gt;2&lt;/span&gt; axes x1y2
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I smoothed out the running total and the average miles/flight lines to make them look
+prettier.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Greg Moselle</dc:creator><pubDate>Thu, 28 Jun 2012 10:20:00 -0500</pubDate><guid>tag:zomgreg.com,2012-06-28:leaving-on-a-jet-plane.html</guid><category>travel</category></item></channel></rss>
