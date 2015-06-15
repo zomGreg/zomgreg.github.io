@@ -1,5 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>zomGreg</title><link href="http://zomgreg.com/" rel="alternate"></link><link href="http://zomgreg.com/feeds/greg-moselle.atom.xml" rel="self"></link><id>http://zomgreg.com/</id><updated>2014-07-16T12:47:00-05:00</updated><entry><title>Cloud Automation - General Form</title><link href="http://zomgreg.com/cloud-automation-general-form.html" rel="alternate"></link><updated>2014-07-16T12:47:00-05:00</updated><author><name>Greg Moselle</name></author><id>tag:zomgreg.com,2014-07-16:cloud-automation-general-form.html</id><summary type="html">&lt;p&gt;Automate application deployment using the cloud! Sure, let's do that, right
+<feed xmlns="http://www.w3.org/2005/Atom"><title>zomGreg</title><link href="http://zomgreg.com/" rel="alternate"></link><link href="http://zomgreg.com/feeds/greg-moselle.atom.xml" rel="self"></link><id>http://zomgreg.com/</id><updated>2015-06-15T18:45:00-05:00</updated><entry><title>Your cloud strategy is bad and you should feel...like you have company.</title><link href="http://zomgreg.com/cloud-strategy-bad.html" rel="alternate"></link><updated>2015-06-15T18:45:00-05:00</updated><author><name>Greg Moselle</name></author><id>tag:zomgreg.com,2015-06-15:cloud-strategy-bad.html</id><summary type="html">&lt;p&gt;I said you have company. Not good company, just company. Plenty of company.&lt;/p&gt;
+&lt;p&gt;I've been working with/on/around enterprise cloud initiatives for 5 years, and during that time I've had the privilege of closely connecting with about 15 serious attempts at true transformative cloud adoption. I count one as a success. One.&lt;/p&gt;
+&lt;p&gt;It's logical to conclude that if I'm the common thread on these projects and my &amp;quot;track record&amp;quot; is a terrible 7%, then my leadership/contributions could be the source of the problem. I'm going to assume that's not the case and try to highlight my perception on what prevented success.&lt;/p&gt;
+&lt;div class="section" id="emergent-technology"&gt;
+&lt;h2&gt;Emergent Technology&lt;/h2&gt;
+&lt;p&gt;Cloud is new. Yes, it's still new. I know we're already on to Docker and whatever else will disrupt cloud, but cloud is still new, still disruptive to the enterprise, and medium to large sized corporations are still trying to figure it out. They're trying to figure out what this means to their processes, work flows, customers, resources, and personnel.&lt;/p&gt;
+&lt;p&gt;Cloud is new and 14/15 enterprise organizations don't have the internal fortitude to weather the disruption.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="virtualization-cloud"&gt;
+&lt;h2&gt;Virtualization = Cloud&lt;/h2&gt;
+&lt;p&gt;This is a category error. Organizations that are just breathing a sigh of relief that they've &amp;quot;got that whole physical-to-virtual thing&amp;quot; handled are often imbued (read: encumbered) with the notion that cloud is just a fancy version of virtualization. This is equivalent to concluding that because humans have mastered the technology of the wheel, they've got the whole transportation thing figured out.&lt;/p&gt;
+&lt;p&gt;Virtualization is necessary, but not sufficient, for cloud.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="enterprise-paradigm"&gt;
+&lt;h2&gt;Enterprise Paradigm&lt;/h2&gt;
+&lt;p&gt;Organizations that paid mountains of technical debt to transform their technological ecosystem to a virtualized one are again empowered (read: encumbered) with a team of virtualization experts. These virtualization experts have built careers undertanding and delivering virtual resources to their user base.&lt;/p&gt;
+&lt;p&gt;Worse, the virtualization team is being tasked with what is the equivalent of technological alchemy. The executive leadership is asking their virtualization experts to turn virtualiztion into cloud. Worse worse, vendors (not mentioning names, but it rhymes with &amp;quot;see em scare&amp;quot;) are all too eager to perpetuate the notion that, at a price, a steep, steep price, your trusted partner in virtualization can help you &amp;quot;cloudify&amp;quot; your virtualized infrastructure.&lt;/p&gt;
+&lt;p&gt;Cloudification is only half the battle. Even if that were a thing that could be done, an equally daunting challenge of transforming the ecosystem that was built around the virtualized enterprise.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="users"&gt;
+&lt;h2&gt;Users&lt;/h2&gt;
+&lt;p&gt;Compounding these challenges are the informed end users. Back when the virtualization revolution was underway, the notion of virtualized resource provisioning was an eventuality that end users didn't really understand, much less expect, until it magically appeard one day. The same is not true of cloud. Cloud consumers are a different breed with an entirely different set of expectations.&lt;/p&gt;
+&lt;p&gt;The accessibility of publicly available, on-demand, self-provisioning is a game-changing, lifestyle-altering expectation for this generation. They don't see it as a thing they should have to wait for the bureaucratically-minded executives to get around to implementing becuase it's already here.&lt;/p&gt;
+&lt;p&gt;EC2 is the benchmark, fair or not, for service, speed, and features, that cloud consumers expect. Virtualized enterprise delivery of compute resources through complex procurement channels looks like a horse-and-buggy to a Tesla Model S driver.&lt;/p&gt;
+&lt;p&gt;Enterprise doesn't understand this expectation, and worse, enterprise seeks to control cloud use through time-tested risk management processes. But this will only work for so long, because the users know what's possible, and nothing will stop them from finding a way to take control of their compute future.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="thoughts"&gt;
+&lt;h2&gt;Thoughts&lt;/h2&gt;
+&lt;p&gt;The single success case I identified had these characteristics:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;They expect cloud adoption to be disruptive. Disruptive to process, policies, workflows, etc. But they stayed the course. They evolved.&lt;/li&gt;
+&lt;li&gt;End users were empowered, included, and involved in the transformation process. Working groups, internal webinars, and other knowledge-sharing events helped the entire organization view the transformation as a journey they were taking together.&lt;/li&gt;
+&lt;li&gt;They set a 2-4 year roadmap for full transformation. This was unique to this group because many other enterprise teams expected a very fast transformation process of only a few months.&lt;/li&gt;
+&lt;li&gt;Mature, cloudy enterprise will take time. The disruption should be positive. End users should feel empowered by the transformation, managers should feel informed and in control.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</summary><category term="Cloud"></category></entry><entry><title>Cloud Automation - General Form</title><link href="http://zomgreg.com/cloud-automation-general-form.html" rel="alternate"></link><updated>2014-07-16T12:47:00-05:00</updated><author><name>Greg Moselle</name></author><id>tag:zomgreg.com,2014-07-16:cloud-automation-general-form.html</id><summary type="html">&lt;p&gt;Automate application deployment using the cloud! Sure, let's do that, right
 after we figure out if &lt;a class="reference external" href="http://zomgreg.com/cloudy-apps-part-1.html"&gt;the application fits a cloud deployment model&lt;/a&gt; and see how well the application is known.&lt;/p&gt;
 &lt;p&gt;The goal when planning for application automation in the cloud is to be able to
 push the &amp;quot;go button&amp;quot; and have the application stack be completely deployed

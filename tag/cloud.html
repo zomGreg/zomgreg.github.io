@@ -73,8 +73,8 @@
 
     <div class='article'>
         <div class="content-title">
-            <a href="../cloud-automation-general-form.html"><h1>Cloud Automation - General Form</h1></a>
-Wed 16 July 2014
+            <a href="../cloud-strategy-bad.html"><h1>Your cloud strategy is bad and you should feel...like you have company.</h1></a>
+Mon 15 June 2015
 
 by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
  
@@ -83,154 +83,65 @@ by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
  
         </div>
         
-        <div><p>Automate application deployment using the cloud! Sure, let's do that, right
-after we figure out if <a class="reference external" href="../cloudy-apps-part-1.html">the application fits a cloud deployment model</a> and see how well the application is known.</p>
-<p>The goal when planning for application automation in the cloud is to be able to
-push the &quot;go button&quot; and have the application stack be completely deployed
-without the involvement of a human being.</p>
-<p>Additionally, should a failure occur, the application stack should be able to
-be restored to full strength without human intervention.</p>
-<p>A tall order, no doubt. How to get there from here:</p>
-<div class="section" id="getting-started">
-<h2>Getting Started</h2>
-<p>The first step in planning for deployment of a cloud application is to map out
-the following cases:</p>
-<ol class="arabic">
-<li><p class="first">What are the steps involved in achieving a running application?</p>
-<p>Starting from building blocks like software build artifacts and a base
-image, for example, how does the application reach a functional state?</p>
-<p>If part of the steps involves the database team and security teams, include
-them in this discussion.</p>
-<p>Map the steps out serially as though the goal was to create a tutorial for
-deploying the application. Don't try to automate yet, it will only impede
-later steps.</p>
-<p>Done with that part? Don't worry if the steps have to be revised, that's
-part of the process.</p>
-</li>
-<li><p class="first">Draw the finished application architecture.</p>
-<p>This is usually the first step taken by application designers, and that's
-fine. Try not to group things together that are not alike. For example,
-separate into tiers the web, application, and database elements, as
-appropriate.</p>
-</li>
-<li><p class="first">Break it and map the steps to fix the problem.</p>
-<p>Now that the application architecture is created. Pick an essential element
-such as a application node and walk through the steps that need to happen in
-order to restore the application stack to full strength if that node breaks.</p>
-<p>I'll shortly argue that there are a general set of steps involved in this
-process, but this exercise is vital to the task of automating the overall
-application.</p>
-</li>
-<li><p class="first">Scale it and map the steps required to accommodate that change.</p>
-<p>Scaling is often another expectation for applications deployed to the cloud.
-A similar process to handling breakage can be used in determining the steps
-required to scale the application at each point where scaling is required.</p>
-<p>We'll walk through just such a case next.</p>
-</li>
-</ol>
+        <div><p>I said you have company. Not good company, just company. Plenty of company.</p>
+<p>I've been working with/on/around enterprise cloud initiatives for 5 years, and during that time I've had the privilege of closely connecting with about 15 serious attempts at true transformative cloud adoption. I count one as a success. One.</p>
+<p>It's logical to conclude that if I'm the common thread on these projects and my &quot;track record&quot; is a terrible 7%, then my leadership/contributions could be the source of the problem. I'm going to assume that's not the case and try to highlight my perception on what prevented success.</p>
+<div class="section" id="emergent-technology">
+<h2>Emergent Technology</h2>
+<p>Cloud is new. Yes, it's still new. I know we're already on to Docker and whatever else will disrupt cloud, but cloud is still new, still disruptive to the enterprise, and medium to large sized corporations are still trying to figure it out. They're trying to figure out what this means to their processes, work flows, customers, resources, and personnel.</p>
+<p>Cloud is new and 14/15 enterprise organizations don't have the internal fortitude to weather the disruption.</p>
 </div>
-<div class="section" id="applications-a-general-form">
-<h2>Applications - A General Form</h2>
-<p>Many application architectures can be reasonably approximated by three tiers: a
-web, application, and database tier.</p>
-<div class="figure align-center">
-<img alt="General Application" src="../images/application.png" />
+<div class="section" id="virtualization-cloud">
+<h2>Virtualization = Cloud</h2>
+<p>This is a category error. Organizations that are just breathing a sigh of relief that they've &quot;got that whole physical-to-virtual thing&quot; handled are often imbued (read: encumbered) with the notion that cloud is just a fancy version of virtualization. This is equivalent to concluding that because humans have mastered the technology of the wheel, they've got the whole transportation thing figured out.</p>
+<p>Virtualization is necessary, but not sufficient, for cloud.</p>
 </div>
-<p>As with any approximation, there is some loss of granularity, for example I did
-not include a load balancer in this diagram, as that function can and often is
-performed at the web tier by software such as nginx or apache.</p>
-<p>A very large amount of applications can be approximated by this diagram.
-Tomcat, many LAMP applications, and others require these elements.</p>
+<div class="section" id="enterprise-paradigm">
+<h2>Enterprise Paradigm</h2>
+<p>Organizations that paid mountains of technical debt to transform their technological ecosystem to a virtualized one are again empowered (read: encumbered) with a team of virtualization experts. These virtualization experts have built careers undertanding and delivering virtual resources to their user base.</p>
+<p>Worse, the virtualization team is being tasked with what is the equivalent of technological alchemy. The executive leadership is asking their virtualization experts to turn virtualiztion into cloud. Worse worse, vendors (not mentioning names, but it rhymes with &quot;see em scare&quot;) are all too eager to perpetuate the notion that, at a price, a steep, steep price, your trusted partner in virtualization can help you &quot;cloudify&quot; your virtualized infrastructure.</p>
+<p>Cloudification is only half the battle. Even if that were a thing that could be done, an equally daunting challenge of transforming the ecosystem that was built around the virtualized enterprise.</p>
 </div>
-<div class="section" id="change-a-scaling-event">
-<h2>Change: A Scaling Event</h2>
-<p>Following the steps listed above, let us follow the case of a scaling event
-that results in the addition of another application node.</p>
-<div class="figure align-center">
-<img alt="General Application - Scaling Event" src="../images/application2.png" />
+<div class="section" id="users">
+<h2>Users</h2>
+<p>Compounding these challenges are the informed end users. Back when the virtualization revolution was underway, the notion of virtualized resource provisioning was an eventuality that end users didn't really understand, much less expect, until it magically appeard one day. The same is not true of cloud. Cloud consumers are a different breed with an entirely different set of expectations.</p>
+<p>The accessibility of publicly available, on-demand, self-provisioning is a game-changing, lifestyle-altering expectation for this generation. They don't see it as a thing they should have to wait for the bureaucratically-minded executives to get around to implementing becuase it's already here.</p>
+<p>EC2 is the benchmark, fair or not, for service, speed, and features, that cloud consumers expect. Virtualized enterprise delivery of compute resources through complex procurement channels looks like a horse-and-buggy to a Tesla Model S driver.</p>
+<p>Enterprise doesn't understand this expectation, and worse, enterprise seeks to control cloud use through time-tested risk management processes. But this will only work for so long, because the users know what's possible, and nothing will stop them from finding a way to take control of their compute future.</p>
 </div>
-<p>If the process to determine the need to scale was automated, the
-framework/utility in which the application was deployed needs to be able to
-handle such events.</p>
-<p>In any case, once the application node has joined the application tier, what
-are the steps that need to happen to handle this change?</p>
-<p>Generally, scaling should be used to &quot;right size&quot; the pool of resources.
-Scaling results in the addition of extra nodes to meet demand or the reduction
-in the number of nodes in response to decreased demand.</p>
-<p>In this case, an application node has joined the application tier. <em>Dependent</em>
-services running in the web and database tier are affected by this change. For
-example, nodes in the web tier might need to know about this change in order to
-start directing traffic to the newly christened application node.</p>
-<p>The database nodes in the database tier need to know to allow for
-incoming traffic from the new application node.</p>
-<p>The new application node itself also requires information if it is to be a
-fully functional member of the application stack. It needs to know how to reach
-and authenticate to the database nodes, and to allow for traffic from the web
-nodes.</p>
-<p>To make things even more rigorous, the configuration steps taken on the web and
-database tiers should be taken <em>after</em> the configuration of the application
-node is complete, but more on that later.</p>
-<div class="figure align-center">
-<img alt="General Application - Configure App Node" src="../images/application3.png" />
-</div>
-<p>The steps to notify the web and database tiers should happen almost
-simultaneously. The proper ordering of automation events includes the complete
-configuration <em>but not the starting</em> of the application node's application at
-this stage.</p>
-<div class="figure align-center">
-<img alt="General Application - Notify Dependents" src="../images/application4.png" />
-</div>
-<p>Once the dependent services are aware of and have made accommodations for the
-newly joined application node, the cloud automation framework should trigger
-the starting of the application on the new application node.</p>
-<div class="figure align-center">
-<img alt="General Application - Start the App" src="../images/application5.png" />
-</div>
-</div>
-<div class="section" id="next-steps">
-<h2>Next Steps</h2>
-<p>In this example we handled a generic scaling case involving the addition of a
-new node to an application tier.</p>
-<p>After presenting the process for automating an example application in this way,
-the question I most often receive is: That's nice for <em>your</em> application, will
-it work for mine?</p>
-<p>This question is akin to asking if addition will work on adding your numbers
-like it did on mine.</p>
-<p>The answer is, wait for it, it depends. The short answer is it depends on how
-well you know the application being automated.</p>
-<p>To find out whether or not your application can be automated in this way, start
-with a couple of assumptions:</p>
+<div class="section" id="thoughts">
+<h2>Thoughts</h2>
+<p>The single success case I identified had these characteristics:</p>
 <ol class="arabic simple">
-<li>The cloud automation framework shown in the diagram exists. Hint: it does.</li>
-<li>The framework passes information to nodes that need it, when they need it.</li>
-<li>The information is passed securely, and is configurable.</li>
+<li>They expect cloud adoption to be disruptive. Disruptive to process, policies, workflows, etc. But they stayed the course. They evolved.</li>
+<li>End users were empowered, included, and involved in the transformation process. Working groups, internal webinars, and other knowledge-sharing events helped the entire organization view the transformation as a journey they were taking together.</li>
+<li>They set a 2-4 year roadmap for full transformation. This was unique to this group because many other enterprise teams expected a very fast transformation process of only a few months.</li>
+<li>Mature, cloudy enterprise will take time. The disruption should be positive. End users should feel empowered by the transformation, managers should feel informed and in control.</li>
 </ol>
-<p>Next, ask these questions:</p>
-<ol class="arabic simple">
-<li>How well do you know the application being automated? This means, among
-other things, knowing:<ul>
-<li>Where are the configuration files for the application?</li>
-<li>What are the steps involved in starting up the application?</li>
-<li>Are there any dependencies for the application such as databases and load balancers?</li>
-<li>If dependencies exist, how can they be notified of failures or scaling?</li>
-</ul>
-</li>
-<li>What steps need to happen in the event of failure?</li>
-<li>What steps need to happen in the event of scaling?</li>
-</ol>
-</div>
-<div class="section" id="wrapping-up">
-<h2>Wrapping Up</h2>
-<p>Automating infrastructure changes via scaling is relatively trivial. The
-interesting part comes in the how applications housed upon said infrastructure
-handle such events.</p>
-<p>I hope this post has provided some insight into the consideration required for
-automating a cloud application.</p>
 </div>
 </div>
         <hr />
     </div>
 		
+
+ 
+        
+
+ 
+
+    <div class='article'>
+        <a href="../cloud-automation-general-form.html"><h2>Cloud Automation - General Form</h2></a>
+        <div class= "well small"> Wed 16 July 2014
+
+by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
+ 
+
+
+ </div>
+        <div class="summary"><p class="first last">A general form for automation cloud applications.</p>
+ <a class="btn btn-info xsmall" href="../cloud-automation-general-form.html">read more</a></div>
+    </div>	
+				
 
  
         
@@ -286,25 +197,6 @@ by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
  </div>
         <div class="summary"><p class="first last">Cloud Value Propositions</p>
  <a class="btn btn-info xsmall" href="../cloud-management-value-propositions.html">read more</a></div>
-    </div>	
-				
-
- 
-        
-
- 
-
-    <div class='article'>
-        <a href="../cloudy-apps-part-2.html"><h2>Cloudy Apps: Part 2</h2></a>
-        <div class= "well small"> Tue 19 March 2013
-
-by <a class="url fn" href="../author/greg-moselle.html">Greg Moselle</a>
- 
-
-
- </div>
-        <div class="summary"><p class="first last">Moving applications to the cloud - Part 2</p>
- <a class="btn btn-info xsmall" href="../cloudy-apps-part-2.html">read more</a></div>
     </div>	
 				
 <div class="pagination">
