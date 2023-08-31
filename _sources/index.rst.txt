@@ -1,0 +1,80 @@
+.. 517 N. Main Suite A documentation master file, created by
+   sphinx-quickstart on Wed Aug 30 15:29:00 2023.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+517 N. Main Suite A
+===================
+
+.. toctree::
+   :maxdepth: 2
+
+Welcome to 517 N. Main Street in Spearfish SD. `Google Maps <https://goo.gl/maps/yC1x5xXuJTKKbyBP6>`_
+
+Lease terms are for a minimum of 1 year (\$2000/mo), subleasing is permitted
+with owner approval. Two dedicated off-street parking spaces, snow removal
+included.
+
+Space is approximately 1200 sf with two levels.
+
+:download:`Click here to download all photos <./images/all_images.zip>`
+
+.. panels::
+
+    Entrance from Street
+
+    .. image:: ./images/entrance.jpeg
+
+    ---
+
+    Main Floor
+
+    .. image:: ./images/main1.jpeg
+
+    ---
+
+    Main Floor
+
+    .. image:: ./images/main2.jpeg
+
+    ---
+
+    Main Floor
+
+    .. image:: ./images/main4.jpeg
+
+    ---
+
+    Bathroom
+
+    .. image:: ./images/bathroom.jpeg
+
+    ---
+
+    Second Floor
+
+    .. image:: ./images/office1.jpeg
+
+    ---
+
+    Second Floor
+
+    .. image:: ./images/office2.jpeg
+
+    ---
+
+    Second Floor
+
+    .. image:: ./images/office3.jpeg
+
+    ---
+
+    Second Floor
+
+    .. image:: ./images/office4.jpeg
+
+    ---
+
+    Kitchen
+
+    .. image:: ./images/kitchen.jpeg
